@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PicpayDesafio</string>
+
+    <!-- Activity Cadastro Cartao -->
+    <string name="cadastrar_cartao">Cadastrar cartão</string>
+    <string name="numero_cartao">Número do cartão</string>
+    <string name="nome_titular">Nome do titular</string>
+    <string name="vencimento">Vencimento</string>
+    <string name="cvv">CVV</string>
+    <string name="salvar">Salvar</string>
+
+    <!-- Activity Contatos -->
+
+</resources>
