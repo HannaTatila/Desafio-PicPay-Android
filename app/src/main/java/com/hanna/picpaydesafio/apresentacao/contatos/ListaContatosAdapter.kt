@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hanna.picpaydesafio.R
+import com.hanna.picpaydesafio.dados.modelo.Contato
 import kotlinx.android.synthetic.main.linha_lista_contatos.view.*
 
 class ListaContatosAdapter(
