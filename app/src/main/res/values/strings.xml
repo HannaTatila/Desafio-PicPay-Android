@@ -9,6 +9,9 @@
     <string name="cvv">CVV</string>
     <string name="salvar">Salvar</string>
 
-    <!-- Activity Contatos -->
+    <!-- Activity Pre Cadastro Cartao -->
+    <string name="msg_cadastre_cartao">Cadastre um cartão de crédito</string>
+    <string name="msg_cadastrar_cartao_para_pagamento">Para fazer pagamento para outras pessoas, você precisa cadastrar um cartão de crédito pessoal</string>
+
 
 </resources>

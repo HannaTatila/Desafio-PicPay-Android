@@ -21,7 +21,7 @@
         android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_contatos"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar_contatos" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_contatos"
@@ -30,6 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_contatos"
-        tools:listitem="@layout/linha_lista_contatos"/>
+        tools:listitem="@layout/linha_lista_contatos" />
 
 </android.support.constraint.ConstraintLayout>

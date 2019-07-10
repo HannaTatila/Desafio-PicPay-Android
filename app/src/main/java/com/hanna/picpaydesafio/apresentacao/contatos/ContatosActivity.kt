@@ -1,11 +1,13 @@
 package com.hanna.picpaydesafio.apresentacao.contatos
 
-import android.support.v7.app.AppCompatActivity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.hanna.picpaydesafio.R
-import hanna.desafiopicpay.Contato
+import com.hanna.picpaydesafio.apresentacao.cartao.PreCadastroCartaoActivity
 import kotlinx.android.synthetic.main.activity_contatos.*
 
 class ContatosActivity : AppCompatActivity() {
@@ -14,20 +16,32 @@ class ContatosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contatos)
 
-        toolbar_contatos.title = "Contatos"
-        setSupportActionBar(toolbar_contatos)
+        intitulaToolbar()
 
-        with(recycler_contatos){
-            layoutManager = LinearLayoutManager(this@ContatosActivity, RecyclerView.VERTICAL, false)
-            setHasFixedSize(true)
-            adapter = ListaContatosAdapter(buscaListaContatos())
-        }
+        val viewModel: ContatosViewModel = ViewModelProviders.of(this).get(ContatosViewModel::class.java)
+        contatosObserver(viewModel)
+        viewModel.buscaListaContatos()
     }
 
-    private fun buscaListaContatos(): List<Contato> {
-        return listOf(Contato("Nome 1", "Imagem 1", "Username 1"),
-                Contato("Nome 2", "Imagem 2", "Username 2"),
-                Contato("Nome 3", "Imagem 3", "Username 3"),
-                Contato("Nome 4", "Imagem 4", "Username 4"))
+    private fun contatosObserver(viewModel: ContatosViewModel) {
+        viewModel.contatoLiveData.observe(this, Observer {
+            it?.let { contatos ->
+                with(recycler_contatos) {
+                    layoutManager = LinearLayoutManager(this@ContatosActivity, RecyclerView.VERTICAL, false)
+                    setHasFixedSize(true)
+                    adapter = ListaContatosAdapter(contatos) { contato ->
+                        val intent = PreCadastroCartaoActivity.buscaIntent(
+                                this@ContatosActivity, contato.nome, contato.imagem, contato.username
+                        )
+                        this@ContatosActivity.startActivity(intent)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun intitulaToolbar() {
+        toolbar_contatos.title = "Contatos"
+        setSupportActionBar(toolbar_contatos)
     }
 }
