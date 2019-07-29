@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_foto_contato"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"/>
 
     <TextView
-        android:id="@+id/text_imagem_contato"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Foto do contato" />
+            android:id="@+id/text_username_contato"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/image_foto_contato"
+            android:textColor="@color/corFonteBranca"
+            tools:text="Username do contato"/>
 
     <TextView
-        android:id="@+id/text_username_contato"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Username do contato" />
+            android:id="@+id/text_nome_contato"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/image_foto_contato"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="27dp"
+            android:textColor="@color/corHintCinzaEscuro"
+            tools:text="Nome do contato"/>
 
-    <TextView
-        android:id="@+id/text_nome_contato"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Nome do contato" />
-
-
-</LinearLayout>
+</RelativeLayout>

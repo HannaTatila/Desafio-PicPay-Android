@@ -8,13 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="android:windowTitleSize">30sp</item>
+        <!--<item name="checkedTextViewStyle"> #corPadraoDasFontes</item>-->
     </style>
 
     <style name="CustomizaEditText" parent="@android:style/TextAppearance">
         <item name="android:textColorHighlight">@color/corFonteBranca</item>
         <item name="android:textColorHint">@color/corHintCinzaEscuro</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:layout_marginTop">70dp</item>
+        <item name="android:layout_marginTop">60dp</item>
         <item name="android:layout_marginRight">15dp</item>
         <item name="android:layout_marginLeft">15dp</item>
     </style>
@@ -22,6 +23,10 @@
 
     <style name="Theme.AppCompat.Light.NoActionBar" parent="@style/Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:weekSeparatorLineColor">@color/colorAccent</item>
     </style>
 
 </resources>

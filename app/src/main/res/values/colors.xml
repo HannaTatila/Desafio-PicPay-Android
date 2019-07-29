@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#141414</color>
-    <color name="colorPrimaryDark">#141414</color>
-    <color name="colorAccent">#31C76A</color>
+    <color name="colorPrimary">#1D1E20</color>
+    <color name="colorPrimaryDark">#1D1E20</color>
+    <color name="colorAccent">#11C66F</color>
+    <!--#31C76A-->
 
     <color name="corFonteBranca">#FFFFFF</color>
     <color name="corHintCinzaEscuro">#7E7C7C</color>
+    <color name="corCinzaCampoBusca">#2B2C2F</color>
+    <color name="corCinzaBotaoDesabilitado">#8E919C</color>
+    <color name="corBarraCabecalhoRecibo">#151516</color>
 </resources>
