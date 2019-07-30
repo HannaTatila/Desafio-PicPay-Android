@@ -8,6 +8,7 @@
     <color name="corFonteBranca">#FFFFFF</color>
     <color name="corHintCinzaEscuro">#7E7C7C</color>
     <color name="corCinzaCampoBusca">#2B2C2F</color>
+    <color name="corCinzaClaro">#6B6B6D</color>
     <color name="corCinzaBotaoDesabilitado">#8E919C</color>
     <color name="corBarraCabecalhoRecibo">#151516</color>
 </resources>

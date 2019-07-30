@@ -88,7 +88,6 @@ class PagamentoActivity : BaseActivity() {
                     toast(getString(R.string.mag_sucesso_pagamento))
                     val viewRecibo = criaViewRecibo()
                     geraRecibo(viewRecibo, transacao.recebedor.imagem, transacao.recebedor.username, transacao.id)
-                    onDestroy()
                 } else {
                     toast(getString(R.string.mag_recusa_pagamento))
                 }
