@@ -19,15 +19,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".apresentacao.cartao.PreCadastroCartaoActivity"
-                  android:parentActivityName=".apresentacao.contatos.ContatosActivity"/>
+        <activity android:name=".apresentacao.cartao.PreCadastroCartaoActivity"/>
 
-        <activity android:name=".apresentacao.cartao.CadastroCartaoActivity"
-                  android:parentActivityName=".apresentacao.contatos.ContatosActivity"/>
+        <activity android:name=".apresentacao.cartao.CadastroCartaoActivity"/>
 
         <activity android:name=".apresentacao.pagamento.PagamentoActivity"
-                  android:parentActivityName=".apresentacao.contatos.ContatosActivity"
+
                   android:windowSoftInputMode="stateVisible|adjustResize"/>
     </application>
-
+    <!--android:parentActivityName=".apresentacao.contatos.ContatosActivity"/>-->
+    <!--android:parentActivityName=".apresentacao.contatos.ContatosActivity"/>-->
+    <!--android:parentActivityName=".apresentacao.contatos.ContatosActivity"-->
 </manifest>

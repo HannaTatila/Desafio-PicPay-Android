@@ -6,7 +6,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <include layout="@layout/include_toolbar"/>
+    <ImageButton
+            android:id="@+id/botao_voltar_pre_cadastro"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_botao_voltar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:tint="@color/colorAccent"
+    />
 
     <ImageView
             android:id="@+id/imageView2"
@@ -57,9 +68,11 @@
             android:text="@string/botao_cadastrar_cartao"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button_cadastrar_cartao" android:background="@drawable/shape_botao"
+            android:id="@+id/button_cadastrar_cartao"
+            android:background="@drawable/shape_botao"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

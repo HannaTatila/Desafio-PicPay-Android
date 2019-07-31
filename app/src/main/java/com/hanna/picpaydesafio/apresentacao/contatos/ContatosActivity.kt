@@ -4,16 +4,16 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.hanna.picpaydesafio.R
-import com.hanna.picpaydesafio.apresentacao.base.BaseActivity
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.cartao.PreCadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
 import kotlinx.android.synthetic.main.activity_contatos.*
 
-class ContatosActivity : BaseActivity() {
+class ContatosActivity : AppCompatActivity() {
 
     private lateinit var mPreCadastroCartaoActivity: PreCadastroCartaoActivity
     private lateinit var mCadastroCartaoActivity: CadastroCartaoActivity
@@ -24,9 +24,6 @@ class ContatosActivity : BaseActivity() {
         setContentView(R.layout.activity_contatos)
         mPreCadastroCartaoActivity = PreCadastroCartaoActivity()
         mCadastroCartaoActivity = CadastroCartaoActivity()
-
-        //configuraToolBar(toolbar_geral, false)
-
 
         val viewModelContatos = ViewModelProviders.of(this).get(ContatosViewModel::class.java)
         contatosObserver(viewModelContatos)

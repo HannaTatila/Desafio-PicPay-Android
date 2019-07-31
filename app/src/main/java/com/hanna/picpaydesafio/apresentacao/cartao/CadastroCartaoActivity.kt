@@ -6,25 +6,23 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import com.hanna.picpaydesafio.R
-import com.hanna.picpaydesafio.apresentacao.base.BaseActivity
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
 import com.hanna.picpaydesafio.dados.ConstantesPersistencia
 import kotlinx.android.synthetic.main.activity_cadastro_cartao.*
-import kotlinx.android.synthetic.main.include_toolbar.*
 import org.jetbrains.anko.toast
 
-class CadastroCartaoActivity : BaseActivity() {
+class CadastroCartaoActivity : AppCompatActivity() {
 
     lateinit var mCartaoViewModel: CartaoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_cartao)
-        configuraToolBar(toolbar_geral)
 
         mCartaoViewModel = ViewModelProviders.of(this).get(CartaoViewModel::class.java)
         cartaoObserver()
@@ -47,6 +45,8 @@ class CadastroCartaoActivity : BaseActivity() {
     }
 
     private fun capturaEventoCliqueBotao() {
+        botao_voltar_cadastro_cartao.setOnClickListener { onBackPressed() }
+
         button_salvar_cartao.setOnClickListener {
             salvarCartao()
         }
@@ -78,17 +78,11 @@ class CadastroCartaoActivity : BaseActivity() {
 
         for (editText in listaEditTextCampos) {
             editText.addTextChangedListener(object : TextWatcher {
-                //var atualizado = false
                 override fun afterTextChanged(s: Editable?) {}
-
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    /*if (atualizado) {
-                        atualizado = false
-                        return
-                    }*/
                     verificaTodosCamposPreenchidos()
-                    //atualizado = true
                 }
             })
         }
@@ -98,15 +92,8 @@ class CadastroCartaoActivity : BaseActivity() {
     private fun chamaTelaPagamento(numeroCartao: String) {
         val intent = PagamentoActivity.buscaIntent(this, numeroCartao)
         this.startActivity(intent)
-        finish()
     }
 
-    /* Usar essa função apenas se for usar o banco de dados
-    override fun onDestroy() {
-        mCartaoViewModel.destroiIntancia()
-        super.onDestroy()
-    }
-    */
 
     private fun verificaTodosCamposPreenchidos() {
         if (edit_numero_cartao.text.toString() != ""

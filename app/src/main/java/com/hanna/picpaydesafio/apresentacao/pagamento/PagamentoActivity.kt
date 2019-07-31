@@ -8,24 +8,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import com.bumptech.glide.Glide
 import com.hanna.picpaydesafio.R
-import com.hanna.picpaydesafio.apresentacao.base.BaseActivity
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
 import com.hanna.picpaydesafio.dados.ConstantesPersistencia
 import com.hanna.picpaydesafio.dados.PreferenciasSeguranca
 import kotlinx.android.synthetic.main.activity_pagamento.*
-import kotlinx.android.synthetic.main.include_toolbar.*
 import kotlinx.android.synthetic.main.view_recibo.view.*
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PagamentoActivity : BaseActivity() {
+class PagamentoActivity : AppCompatActivity() {
 
     private lateinit var mContatoPreferencias: PreferenciasSeguranca
     private lateinit var mPagamentoViewModel: PagamentoViewModel
@@ -37,7 +36,6 @@ class PagamentoActivity : BaseActivity() {
 
         mContatoPreferencias = PreferenciasSeguranca(this)
 
-        configuraToolBar(toolbar_geral)
         configuraNumeroCartao()
         manipulaPagamentoViewModel()
         capturaEventoAtualizacaoValor()
@@ -45,14 +43,14 @@ class PagamentoActivity : BaseActivity() {
     }
 
     private fun controlaEventoClique() {
+        botao_voltar_pagamento.setOnClickListener { onBackPressed() }
+
+        link_editar_cartao.setOnClickListener { chamaTelaCadastro() }
+
         button_pagar.setOnClickListener {
             //val valorPagamento = currencyedit_valor.text.toString().toDouble() TODO: transformar em BigDecimal depois
             val valorPagamento: Double = 5.52 //TODO: erro ao passar o valor Double
             mPagamentoViewModel.enviaDadosTransacao(this, valorPagamento)
-        }
-
-        link_editar_cartao.setOnClickListener {
-            chamaTelaCadastro()
         }
     }
 

@@ -15,7 +15,19 @@
             android:background="@color/colorPrimaryDark"
             android:orientation="vertical">
 
-        <include layout="@layout/include_toolbar"/>
+        <ImageButton
+                android:id="@+id/botao_voltar_cadastro_cartao"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_botao_voltar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:tint="@color/colorAccent"
+        />
+
 
         <TextView
                 android:id="@+id/text_cadastrar_cartao"
@@ -24,10 +36,11 @@
                 android:text="@string/cadastrar_cartao"
                 android:textColor="@color/corFonteBranca"
                 android:paddingLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar_geral"/>
+                app:layout_constraintTop_toBottomOf="@+id/botao_voltar_cadastro_cartao"/>
 
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_numero_cartao"
