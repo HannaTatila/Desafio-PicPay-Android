@@ -25,8 +25,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
-        <item name="android:weekSeparatorLineColor">@color/colorAccent</item>
+    <style name="CustomizaCampoBuscaAtivo" parent="@android:style/TextAppearance">
+        <item name="android:drawableRight">@drawable/ic_botao_fechar</item>
     </style>
+
 
 </resources>

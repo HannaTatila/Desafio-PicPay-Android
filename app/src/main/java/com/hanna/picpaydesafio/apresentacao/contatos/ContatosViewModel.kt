@@ -59,7 +59,7 @@ class ContatosViewModel : ViewModel() {
         )
     }
 
-    fun numeroCartaoCadastrado(contexto: Context): String {
+    fun buscaNumeroCartaoCadastrado(contexto: Context): String {
         val mCartaoPreferencias = PreferenciasSeguranca(contexto)
         return mCartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO)
     }

@@ -11,6 +11,9 @@ import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.cartao.PreCadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
+import com.jakewharton.rxbinding2.widget.query
+import com.jakewharton.rxbinding2.widget.queryTextChanges
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_contatos.*
 
 class ContatosActivity : AppCompatActivity() {
@@ -18,6 +21,7 @@ class ContatosActivity : AppCompatActivity() {
     private lateinit var mPreCadastroCartaoActivity: PreCadastroCartaoActivity
     private lateinit var mCadastroCartaoActivity: CadastroCartaoActivity
     private var mNumeroCartaoCadastrado: String = ""
+    private var mDisposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,24 +32,47 @@ class ContatosActivity : AppCompatActivity() {
         val viewModelContatos = ViewModelProviders.of(this).get(ContatosViewModel::class.java)
         contatosObserver(viewModelContatos)
         viewModelContatos.buscaListaContatos()
-
-        search_contatos.setOnClickListener { search_contatos.setBackgroundResource(R.drawable.shape_campo_busca_ativo) }
     }
 
     private fun contatosObserver(viewModelContatos: ContatosViewModel) {
         viewModelContatos.contatoLiveData.observe(this, Observer {
             it?.let { contatos ->
                 with(recycler_contatos) {
-                    layoutManager = LinearLayoutManager(this@ContatosActivity, RecyclerView.VERTICAL, false)
-                    setHasFixedSize(true)
-                    adapter = ListaContatosAdapter(contatos) { contato ->
+                    val adapterContatos = ListaContatosAdapter(contatos) { contato ->
                         viewModelContatos.gravaDadosContatoSelecionado(this@ContatosActivity, contato)
-                        mNumeroCartaoCadastrado = viewModelContatos.numeroCartaoCadastrado(this@ContatosActivity)
+                        mNumeroCartaoCadastrado = viewModelContatos.buscaNumeroCartaoCadastrado(this@ContatosActivity)
+                        //restauraCampoBusca()
                         defineProximaTela()
                     }
+
+                    verificaMudancaCampoBusca(adapterContatos)
+                    layoutManager = LinearLayoutManager(this@ContatosActivity, RecyclerView.VERTICAL, false)
+                    setHasFixedSize(true)
+                    adapter = adapterContatos
                 }
             }
         })
+    }
+
+    private fun verificaMudancaCampoBusca(adapterContatos: ListaContatosAdapter) {
+        //search_contatos.setOnClickListener { onWindowFocusChanged(true) }
+
+        mDisposable = search_contatos.queryTextChanges()
+            .skipInitialValue()
+            .subscribe { termo ->
+                //if (termo.isNullOrBlank()) restauraCampoBusca() else customimzaCampoBusca()
+                adapterContatos.filter.filter(termo)
+            }
+    }
+
+
+    fun restauraCampoBusca() {
+        search_contatos.run {
+            clearFocus()
+            query(false)
+            setOnQueryTextListener(null)
+        }
+        //search_contatos.clearComposingText()
     }
 
     private fun defineProximaTela() {
@@ -58,5 +85,23 @@ class ContatosActivity : AppCompatActivity() {
         }
         this.startActivity(intent)
     }
+
+    private fun defineProximaTela2() {
+        val existeCartaoCadastrado = mNumeroCartaoCadastrado != ""
+        val intent: Intent
+        intent = if (existeCartaoCadastrado) chamaTelaCadastroCartao() else chamaTelaPreCadastroCartato()
+        this.startActivity(intent)
+    }
+
+    private fun chamaTelaCadastroCartao() = PagamentoActivity.buscaIntent(this, mNumeroCartaoCadastrado)
+
+    private fun chamaTelaPreCadastroCartato() = PreCadastroCartaoActivity.buscaIntent(this)
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mDisposable?.dispose()
+    }
+
 
 }

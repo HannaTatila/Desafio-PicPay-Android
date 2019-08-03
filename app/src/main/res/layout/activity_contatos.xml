@@ -50,8 +50,7 @@
                         android:background="@drawable/shape_campo_busca"
                         android:queryHint="A quem você deseja pagar?"
                         android:iconifiedByDefault="false"
-                        android:lines="1"
-                        android:theme="@style/AppSearchView"/>
+                        android:lines="1"/>
 
             </LinearLayout>
 
