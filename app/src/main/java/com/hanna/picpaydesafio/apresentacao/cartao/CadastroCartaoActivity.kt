@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
 import com.hanna.picpaydesafio.dados.ConstantesPersistencia
@@ -18,19 +19,43 @@ import org.jetbrains.anko.toast
 
 class CadastroCartaoActivity : AppCompatActivity() {
 
-    lateinit var mCartaoViewModel: CartaoViewModel
+    private lateinit var mCartaoViewModel: CartaoViewModel
+    private lateinit var mNumeroCartao: EditText
+    private lateinit var mTitularCartao: EditText
+    private lateinit var mVencimentoCartao: EditText
+    private lateinit var mCvvCartao: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_cartao)
+        mNumeroCartao = edit_numero_cartao
+        mTitularCartao = edit_nome_titular
+        mVencimentoCartao = edit_vencimento
+        mCvvCartao = edit_cvv
 
         mCartaoViewModel = ViewModelProviders.of(this).get(CartaoViewModel::class.java)
-        cartaoObserver()
-        mCartaoViewModel.buscaDadosCartao(this)
 
+        verificaSeEAtualizacao()
         capturaEventoAtualizacaoDosCampos()
         capturaEventoCliqueBotao()
+    }
 
+    private fun capturaEventoCliqueBotao() {
+        botao_voltar_cadastro_cartao.setOnClickListener { onBackPressed() }
+        button_salvar_cartao.setOnClickListener { salvarCartao() }
+    }
+
+    private fun verificaSeEAtualizacao() {
+        val existeCartaoCadastrado = verificaExistenciaCartao()
+        if (existeCartaoCadastrado) {
+            mCartaoViewModel.buscaDadosCartao(this)
+            cartaoObserver()
+        }
+    }
+
+    private fun verificaExistenciaCartao(): Boolean {
+        val pacote = intent.extras
+        return pacote != null
     }
 
     private fun cartaoObserver() {
@@ -44,16 +69,35 @@ class CadastroCartaoActivity : AppCompatActivity() {
         })
     }
 
-    private fun capturaEventoCliqueBotao() {
-        botao_voltar_cadastro_cartao.setOnClickListener { onBackPressed() }
+    private fun capturaEventoAtualizacaoDosCampos() {
+        var listaCamposEditText =
+            listOf<TextInputEditText>(edit_numero_cartao, edit_nome_titular, edit_vencimento, edit_cvv)
 
-        button_salvar_cartao.setOnClickListener {
-            salvarCartao()
+        for (editText in listaCamposEditText) {
+            editText.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val camposValidos = verificaTodosCamposPreenchidos()
+                    customizaBotao(camposValidos)
+                }
+            })
         }
     }
 
+    private fun verificaTodosCamposPreenchidos(): Boolean {
+        return edit_numero_cartao.text.toString() != ""
+                && edit_nome_titular.text.toString() != ""
+                && edit_vencimento.text.toString() != ""
+                && edit_cvv.text.toString() != ""
+    }
+
+    private fun customizaBotao(camposValidos: Boolean) {
+        if (camposValidos) button_salvar_cartao.visibility = View.VISIBLE
+        else button_salvar_cartao.visibility = View.GONE
+    }
+
     private fun salvarCartao() {
-        //if (valoresValidos()) {
         try {
             val numeroCartao = edit_numero_cartao.text.toString()
             val nomeTitular = edit_nome_titular.text.toString()
@@ -67,58 +111,22 @@ class CadastroCartaoActivity : AppCompatActivity() {
             println(e.message.toString())
             toast(getString(R.string.msg_erro_inesperado))
         }
-        //}else{
-        //    toast("Preencha os campos corretamente")
-        //}
     }
-
-    private fun capturaEventoAtualizacaoDosCampos() {
-        var listaEditTextCampos =
-            listOf<TextInputEditText>(edit_numero_cartao, edit_nome_titular, edit_vencimento, edit_cvv)
-
-        for (editText in listaEditTextCampos) {
-            editText.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {}
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    verificaTodosCamposPreenchidos()
-                }
-            })
-        }
-    }
-
 
     private fun chamaTelaPagamento(numeroCartao: String) {
         val intent = PagamentoActivity.buscaIntent(this, numeroCartao)
         this.startActivity(intent)
     }
 
-
-    private fun verificaTodosCamposPreenchidos() {
-        if (edit_numero_cartao.text.toString() != ""
-            && edit_nome_titular.text.toString() != ""
-            && edit_vencimento.text.toString() != ""
-            && edit_cvv.text.toString() != ""
-        ) {
-            button_salvar_cartao.visibility = View.VISIBLE
-        } else {
-            button_salvar_cartao.visibility = View.GONE
-        }
-    }
-
     companion object {
-        fun buscaIntent(contexto: Context): Intent {
-            return Intent(contexto, CadastroCartaoActivity::class.java)
+        private const val NUMERO_CARTAO = "NUMERO_CARTAO" //TODO: criar constante
+
+        fun buscaIntent(contexto: Context, numeroCartao: String?): Intent {
+            val pacote = Bundle()
+            pacote.putString(NUMERO_CARTAO, numeroCartao)
+            return Intent(contexto, CadastroCartaoActivity::class.java).putExtras(pacote)
         }
     }
 
 }
 
-/* Para teste:
-println("Valor dos campos nesse instante:")
-println(edit_numero_cartao.text.toString())
-println(edit_nome_titular.text.toString())
-println(edit_vencimento.text.toString())
-println(edit_cvv.text.toString())
-*/

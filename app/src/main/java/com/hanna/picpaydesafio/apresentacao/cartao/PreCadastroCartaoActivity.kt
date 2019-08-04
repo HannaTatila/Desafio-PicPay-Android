@@ -22,7 +22,7 @@ class PreCadastroCartaoActivity : AppCompatActivity() {
     }
 
     private fun chamaTelaCadastro() {
-        val intent = CadastroCartaoActivity.buscaIntent(this)
+        val intent = CadastroCartaoActivity.buscaIntent(this, null)
         this.startActivity(intent)
 
     }

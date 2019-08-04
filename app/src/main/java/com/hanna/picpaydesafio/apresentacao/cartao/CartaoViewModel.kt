@@ -16,7 +16,7 @@ class CartaoViewModel : ViewModel() {
         vencimento: String,
         cvv: String
     ) {
-        var cartaoPreferencias = PreferenciasSeguranca(contexto)
+        val cartaoPreferencias = PreferenciasSeguranca(contexto)
 
         cartaoPreferencias.armazenaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
         cartaoPreferencias.armazenaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR, nomeTitular)
@@ -26,22 +26,20 @@ class CartaoViewModel : ViewModel() {
 
     fun buscaDadosCartao(contexto: Context) {
         val cartaoPreferencias = PreferenciasSeguranca(contexto)
+
         val chaveNumero = ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO
+        val chaveNomeTitular = ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR
+        val chaveVencimento = ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO
+        val chaveCvv = ConstantesPersistencia.CHAVE_CARTAO.CVV
 
-        if (cartaoPreferencias.buscaValorCartao(chaveNumero) != "") {
-            val chaveNomeTitular = ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR
-            val chaveVencimento = ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO
-            val chaveCvv = ConstantesPersistencia.CHAVE_CARTAO.CVV
+        val dicionarioDadosCartao = mapOf(
+            Pair(chaveNumero, cartaoPreferencias.buscaValorCartao(chaveNumero)),
+            Pair(chaveNomeTitular, cartaoPreferencias.buscaValorCartao(chaveNomeTitular)),
+            Pair(chaveVencimento, cartaoPreferencias.buscaValorCartao(chaveVencimento)),
+            Pair(chaveCvv, cartaoPreferencias.buscaValorCartao(chaveCvv))
+        )
 
-            var dicionarioDadosCartao = mapOf(
-                Pair(chaveNumero, cartaoPreferencias.buscaValorCartao(chaveNumero)),
-                Pair(chaveNomeTitular, cartaoPreferencias.buscaValorCartao(chaveNomeTitular)),
-                Pair(chaveVencimento, cartaoPreferencias.buscaValorCartao(chaveVencimento)),
-                Pair(chaveCvv, cartaoPreferencias.buscaValorCartao(chaveCvv))
-            )
-
-            dadosCartaoLiveData.value = dicionarioDadosCartao
-        }
+        dadosCartaoLiveData.value = dicionarioDadosCartao
     }
 
 }

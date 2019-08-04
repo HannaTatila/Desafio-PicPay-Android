@@ -28,7 +28,8 @@ class PagamentoActivity : AppCompatActivity() {
 
     private lateinit var mContatoPreferencias: PreferenciasSeguranca
     private lateinit var mPagamentoViewModel: PagamentoViewModel
-    private var mNumeroProtegido: String = ""
+    private var mNumeroCartao: String? = ""
+    private var mNumeroCartaoProtegido: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,28 +37,22 @@ class PagamentoActivity : AppCompatActivity() {
 
         mContatoPreferencias = PreferenciasSeguranca(this)
 
-        configuraNumeroCartao()
+        capturaNumeroCartao()
+        protegeNumeroCartao()
         manipulaPagamentoViewModel()
         capturaEventoAtualizacaoValor()
         controlaEventoClique()
     }
 
-    private fun controlaEventoClique() {
-        botao_voltar_pagamento.setOnClickListener { onBackPressed() }
-
-        link_editar_cartao.setOnClickListener { chamaTelaCadastro() }
-
-        button_pagar.setOnClickListener {
-            //val valorPagamento = currencyedit_valor.text.toString().toDouble() TODO: transformar em BigDecimal depois
-            val valorPagamento: Double = 5.52 //TODO: erro ao passar o valor Double
-            mPagamentoViewModel.enviaDadosTransacao(this, valorPagamento)
+    private fun capturaNumeroCartao() {
+        val pacote = intent.extras
+        pacote.let {
+            mNumeroCartao = pacote.getString("NUMERO_CARTAO") //TODO: criar constante
         }
     }
 
-    private fun chamaTelaCadastro() {
-        // TODO: Mandar numero do cartao. Se tiver preenchido é atualização, senão é inserção
-        val intent = CadastroCartaoActivity.buscaIntent(this)
-        this.startActivity(intent)
+    private fun protegeNumeroCartao() {
+        mNumeroCartaoProtegido = mNumeroCartao?.take(4)
     }
 
     private fun manipulaPagamentoViewModel() {
@@ -74,7 +69,7 @@ class PagamentoActivity : AppCompatActivity() {
                 var urlImagem: String? = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO]
                 Glide.with(this@PagamentoActivity).load(urlImagem).into(image_foto_contato)
                 text_username_contato.text = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO]
-                text_numero_cartao.text = "Mastercard $mNumeroProtegido •"
+                text_numero_cartao.text = "Mastercard $mNumeroCartaoProtegido •"
             }
         })
     }
@@ -91,14 +86,6 @@ class PagamentoActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    private fun configuraNumeroCartao() {
-        val pacote = intent.extras
-        if (pacote != null) {
-            val numeroCartao = pacote.getString("NUMERO_CARTAO") //TODO: criar constante
-            mNumeroProtegido = numeroCartao?.toString()!!.take(4)
-        }
     }
 
     private fun capturaEventoAtualizacaoValor() {
@@ -121,6 +108,23 @@ class PagamentoActivity : AppCompatActivity() {
         txt_cifrao.setTextColor(cor)
     }
 
+    private fun controlaEventoClique() {
+        botao_voltar_pagamento.setOnClickListener { onBackPressed() }
+
+        link_editar_cartao.setOnClickListener { chamaTelaCadastro() }
+
+        button_pagar.setOnClickListener {
+            //val valorPagamento = currencyedit_valor.text.toString().toDouble() TODO: transformar em BigDecimal depois
+            val valorPagamento: Double = 5.52 //TODO: erro ao passar o valor Double
+            mPagamentoViewModel.enviaDadosTransacao(this, valorPagamento)
+        }
+    }
+
+    private fun chamaTelaCadastro() {
+        val intent = CadastroCartaoActivity.buscaIntent(this, mNumeroCartao)
+        this.startActivity(intent)
+    }
+
     fun criaViewRecibo(): View {
         return this.layoutInflater.inflate(R.layout.view_recibo, null)
     }
@@ -134,7 +138,7 @@ class PagamentoActivity : AppCompatActivity() {
         val dataHoraAtual = buscaDataHoraAtual() //timestamp
         view.txt_data_hora.text = dataHoraAtual
 
-        view.txt_dados_cartao.text = "Cartão Master $mNumeroProtegido"
+        view.txt_dados_cartao.text = "Cartão Master $mNumeroCartaoProtegido"
 
         val caixaDialogo = BottomSheetDialog(this)
         caixaDialogo.setContentView(view)
@@ -175,4 +179,16 @@ class PagamentoActivity : AppCompatActivity() {
             return Intent(contexto, PagamentoActivity::class.java).putExtras(pacote)
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+    private fun configuraNumeroCartao() {
+        val pacote = intent.extras
+        if (pacote != null) {
+            mNumeroCartao = pacote.getString("NUMERO_CARTAO") //TODO: criar constante
+            mNumeroCartaoProtegido = mNumeroCartao.take(4)
+        }
+    }
+    */
 }
