@@ -19,7 +19,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_toRightOf="@+id/image_foto_contato"
+            android:layout_toEndOf="@+id/image_foto_contato"
             android:textColor="@color/corFonteBranca"
             tools:text="Username do contato"/>
 
@@ -28,7 +30,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/image_foto_contato"
+            android:layout_toEndOf="@id/image_foto_contato"
             android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="27dp"
             android:textColor="@color/corHintCinzaEscuro"
             tools:text="Nome do contato"/>

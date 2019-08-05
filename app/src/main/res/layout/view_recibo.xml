@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -18,8 +18,8 @@
 
     <View
             android:id="@+id/viewLinha1"
-            android:layout_width="40dp"
-            android:layout_height="3dp"
+            android:layout_width="35dp"
+            android:layout_height="2dp"
             android:layout_marginTop="10dp"
             android:layout_gravity="center_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
             android:layout_marginTop="25dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Recibo"/>
+            android:text="@string/recibo"/>
 
     <LinearLayout
             android:id="@+id/header"
@@ -57,7 +57,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="71dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_cartao_credito"/>
+                tools:src="@drawable/ic_launcher_background"/>
 
         <TextView
                 android:id="@+id/txt_username_contato"
@@ -67,7 +67,7 @@
                 android:layout_gravity="center"
                 android:textSize="20sp"
                 android:textColor="@color/corFonteBranca"
-                android:text="Nome do fulano"/>
+                tools:text="Nome do recebedor"/>
 
         <TextView
                 android:id="@+id/txt_data_hora"
@@ -77,7 +77,7 @@
                 android:layout_gravity="center"
                 android:textSize="15sp"
                 android:textColor="@color/corHintCinzaEscuro"
-                android:text="00/00/0000 às 00:48 "/>
+                tools:text="00/00/0000 às 00:00"/>
 
         <TextView
                 android:id="@+id/txt_numero_transacao"
@@ -87,7 +87,7 @@
                 android:layout_gravity="center"
                 android:textSize="12sp"
                 android:textColor="@color/corHintCinzaEscuro"
-                android:text="Transação 1234567"/>
+                tools:text="Transação 1234567"/>
 
         <View
                 android:id="@+id/viewLinha2"
@@ -111,7 +111,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/corFonteBranca"
-                    android:text="Cartão Master 0000"/>
+                    tools:text="Cartão Master 0000"/>
 
             <TextView
                     android:id="@+id/txt_valor"
@@ -121,7 +121,7 @@
                     android:layout_marginBottom="15dp"
                     android:textSize="15sp"
                     android:textColor="@color/corFonteBranca"
-                    android:text=" R$ 16,00"/>
+                    tools:text=" R$ 16,00"/>
 
         </LinearLayout>
 
@@ -145,18 +145,17 @@
                     android:textStyle="bold"
                     android:textSize="19sp"
                     android:textColor="@color/corFonteBranca"
-                    android:text="Total pago"/>
+                    android:text="@string/titulo_total_pago"/>
 
             <TextView
                     android:id="@+id/txt_total_pago"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_marginTop="15dp"
                     android:textStyle="bold"
                     android:textSize="19sp"
                     android:textColor="@color/corFonteBranca"
-                    android:text=" R$ 16,00"/>
+                    tools:text=" R$ 0,00"/>
 
         </LinearLayout>
 

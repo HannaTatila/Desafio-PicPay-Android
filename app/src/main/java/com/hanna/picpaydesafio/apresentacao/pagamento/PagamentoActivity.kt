@@ -81,7 +81,7 @@ class PagamentoActivity : AppCompatActivity() {
     private fun incorporaDadosView() {
         Glide.with(this@PagamentoActivity).load(mUrlImagemContato).into(image_foto_contato)
         text_username_contato.text = mUsernameContato
-        text_numero_cartao.text = "Mastercard $mNumeroCartaoProtegido •"
+        text_numero_cartao.text = getString(R.string.mastercard) + mNumeroCartaoProtegido + " •"
     }
 
     private fun capturaEventoAtualizacaoValor() {
@@ -152,7 +152,7 @@ class PagamentoActivity : AppCompatActivity() {
         Glide.with(viewRecibo.context).load(mUrlImagemContato).into(viewRecibo.img_foto_contato)
         viewRecibo.txt_username_contato.text = mUsernameContato
         viewRecibo.txt_numero_transacao.text = getString(R.string.transacao) + idTransacao.toString()
-        viewRecibo.txt_dados_cartao.text = "Cartão Master $mNumeroCartaoProtegido"
+        viewRecibo.txt_dados_cartao.text = getString(R.string.cartao_master) + mNumeroCartaoProtegido
 
         val valorEmReal = formataBigDecimalParaMoeda(valor)
         viewRecibo.txt_valor.text = valorEmReal

@@ -1,28 +1,45 @@
 <resources>
     <string name="app_name">PicpayDesafio</string>
 
+    <!-- Activity Contatos -->
+    <string name="titulo_contatos">Contatos</string>
+    <string name="titulo_toolbar_contatos">Contatos</string>
+    <string name="hint_campo_busca">A quem você deseja pagar?</string>
+
     <!-- Activity Cadastro Cartao -->
     <string name="cadastrar_cartao">Cadastrar cartão</string>
     <string name="numero_cartao">Número do cartão</string>
     <string name="nome_titular">Nome do titular</string>
     <string name="vencimento">Vencimento</string>
     <string name="cvv">CVV</string>
-    <string name="salvar">Salvar</string>
+    <string name="botao_salvar">Salvar</string>
     <string name="msg_sucesso_cadastro">Cartão cadastrado com sucesso!</string>
     <string name="msg_erro_inesperado">Ocorreu um erro inesperado!</string>
 
     <!-- Activity Pre Cadastro Cartao -->
+    <string name="descricao_img_cartao">Imagem de cartão de crédito</string>
     <string name="msg_cadastre_cartao">Cadastre um cartão de crédito</string>
     <string name="msg_cadastrar_cartao_para_pagamento">Para fazer pagamentos para outras pessoas você precisa cadastrar
         um cartão de crédito pessoal
     </string>
+    <string name="botao_cadastrar_cartao">Cadastrar Cartão</string>
 
-    <!-- Activity Contatos -->
-    <string name="titulo_contatos">Contatos</string>
-    <string name="titulo_toolbar_contatos">Contatos</string>
+    <!-- Activity Pagamento -->
+    <string name="cifrao">R$</string>
+    <string name="valor_zerado">0,00</string>
+    <string name="link_editar">EDITAR</string>
+    <string name="botao_pagar">Pagar</string>
     <string name="mag_sucesso_pagamento">Pagamento realizado com sucesso!</string>
     <string name="mag_recusa_pagamento">Cartão inválido. Tente novamente!</string>
-    <string name="botao_cadastrar_cartao">Cadastrar Cartão</string>
+    <string name="mastercard">Mastercard</string>
+
+    <!-- Activity Recibo-->
+    <string name="recibo">Recibo</string>
     <string name="transacao">Transação</string>
+    <string name="cartao_master">Cartão Master</string>
+    <string name="titulo_total_pago">Total pago</string>
+
+    <!-- Geral -->
+    <string name="descricao_botao_voltar">Botão voltar</string>
 
 </resources>

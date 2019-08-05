@@ -26,8 +26,7 @@
                 android:background="@null"
                 android:scaleType="centerInside"
                 android:tint="@color/colorAccent"
-                android:contentDescription="Botão voltar"/>
-
+                android:contentDescription="@string/descricao_botao_voltar"/>
 
         <TextView
                 android:id="@+id/text_cadastrar_cartao"
@@ -148,7 +147,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 style="@style/CustomizaBotaoPadrao"
-                android:text="@string/salvar"
+                android:text="@string/botao_salvar"
                 android:visibility="visible"/>
 
     </android.support.constraint.ConstraintLayout>

@@ -19,7 +19,7 @@
             android:background="@null"
             android:scaleType="centerInside"
             android:tint="@color/colorAccent"
-            android:contentDescription="Botão voltar"/>
+            android:contentDescription="@string/descricao_botao_voltar"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_foto_contato"
@@ -43,7 +43,7 @@
             android:layout_gravity="center"
             android:textSize="14sp"
             android:textColor="@color/corFonteBranca"
-            android:text="Nome do fulano"/>
+            tools:text="Username do recebedor"/>
 
     <LinearLayout
             android:id="@+id/linear_valor"
@@ -63,7 +63,7 @@
                 android:textSize="18sp"
                 android:layout_margin="10dp"
                 android:textColor="@color/corHintCinzaEscuro"
-                android:text="R$"/>
+                android:text="@string/cifrao"/>
 
         <me.abhinay.input.CurrencyEditText
                 android:id="@+id/currencyedit_valor"
@@ -73,7 +73,7 @@
                 android:textCursorDrawable="@null"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/corHintCinzaEscuro"
-                android:hint="0,00"
+                android:hint="@string/valor_zerado"
                 android:inputType="number"
                 android:textSize="54sp"/>
 
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/colorAccent"
-                android:text="EDITAR"
+                android:text="@string/link_editar"
                 android:textAllCaps="true"/>
 
     </LinearLayout>
@@ -116,7 +116,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             style="@style/CustomizaBotaoPadrao"
             android:layout_margin="16dp"
-            android:text="Pagar"
+            android:text="@string/botao_pagar"
             android:enabled="false"/>
 
     <ProgressBar

@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
 import com.hanna.picpaydesafio.dados.ConstantesPersistencia
@@ -20,24 +19,28 @@ import org.jetbrains.anko.toast
 class CadastroCartaoActivity : AppCompatActivity() {
 
     private lateinit var mCartaoViewModel: CartaoViewModel
-    private lateinit var mNumeroCartao: EditText
-    private lateinit var mTitularCartao: EditText
-    private lateinit var mVencimentoCartao: EditText
-    private lateinit var mCvvCartao: EditText
+    private lateinit var mNumeroCartao: TextInputEditText
+    private lateinit var mTitularCartao: TextInputEditText
+    private lateinit var mVencimentoCartao: TextInputEditText
+    private lateinit var mCvvCartao: TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_cartao)
-        mNumeroCartao = edit_numero_cartao
-        mTitularCartao = edit_nome_titular
-        mVencimentoCartao = edit_vencimento
-        mCvvCartao = edit_cvv
+        capturaCamposDadosCartao()
 
         mCartaoViewModel = ViewModelProviders.of(this).get(CartaoViewModel::class.java)
 
         verificaSeEAtualizacao()
         capturaEventoAtualizacaoDosCampos()
         capturaEventoCliqueBotao()
+    }
+
+    private fun capturaCamposDadosCartao() {
+        mNumeroCartao = edit_numero_cartao
+        mTitularCartao = edit_nome_titular
+        mVencimentoCartao = edit_vencimento
+        mCvvCartao = edit_cvv
     }
 
     private fun capturaEventoCliqueBotao() {
@@ -61,17 +64,17 @@ class CadastroCartaoActivity : AppCompatActivity() {
     private fun cartaoObserver() {
         mCartaoViewModel.dadosCartaoLiveData.observe(this, Observer {
             it?.let { dadosCartao ->
-                edit_numero_cartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO])
-                edit_nome_titular.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR])
-                edit_vencimento.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO])
-                edit_cvv.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.CVV])
+                mNumeroCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO])
+                mTitularCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR])
+                mVencimentoCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO])
+                mCvvCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.CVV])
             }
         })
     }
 
     private fun capturaEventoAtualizacaoDosCampos() {
-        var listaCamposEditText =
-            listOf<TextInputEditText>(edit_numero_cartao, edit_nome_titular, edit_vencimento, edit_cvv)
+        val listaCamposEditText =
+            listOf<TextInputEditText>(mNumeroCartao, mTitularCartao, mVencimentoCartao, mCvvCartao)
 
         for (editText in listaCamposEditText) {
             editText.addTextChangedListener(object : TextWatcher {
@@ -86,10 +89,10 @@ class CadastroCartaoActivity : AppCompatActivity() {
     }
 
     private fun verificaTodosCamposPreenchidos(): Boolean {
-        return edit_numero_cartao.text.toString() != ""
-                && edit_nome_titular.text.toString() != ""
-                && edit_vencimento.text.toString() != ""
-                && edit_cvv.text.toString() != ""
+        return mNumeroCartao.text.toString() != ""
+                && mTitularCartao.text.toString() != ""
+                && mVencimentoCartao.text.toString() != ""
+                && mCvvCartao.text.toString() != ""
     }
 
     private fun customizaBotao(camposValidos: Boolean) {
@@ -99,10 +102,10 @@ class CadastroCartaoActivity : AppCompatActivity() {
 
     private fun salvarCartao() {
         try {
-            val numeroCartao = edit_numero_cartao.text.toString()
-            val nomeTitular = edit_nome_titular.text.toString()
-            val vencimento = edit_vencimento.text.toString()
-            val cvv = edit_cvv.text.toString()
+            val numeroCartao = mNumeroCartao.text.toString()
+            val nomeTitular = mTitularCartao.text.toString()
+            val vencimento = mVencimentoCartao.text.toString()
+            val cvv = mCvvCartao.text.toString()
 
             mCartaoViewModel.armazenaDadosCartao(this, numeroCartao, nomeTitular, vencimento, cvv)
             toast(getString(R.string.msg_sucesso_cadastro))

@@ -98,7 +98,6 @@ class ContatosActivity : AppCompatActivity() {
 
     private fun chamaTelaPreCadastroCartato() = PreCadastroCartaoActivity.buscaIntent(this)
 
-
     override fun onDestroy() {
         super.onDestroy()
         mDisposable?.dispose()
