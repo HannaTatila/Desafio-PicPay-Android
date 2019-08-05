@@ -13,6 +13,7 @@ import com.hanna.picpaydesafio.dados.response.TransacaoResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.math.BigDecimal
 
 
 class PagamentoViewModel : ViewModel() {
@@ -23,12 +24,12 @@ class PagamentoViewModel : ViewModel() {
     var transacaoLiveData: MutableLiveData<CorpoTransacaoResponse> = MutableLiveData()
 
     fun buscaDadosRecebedor(contexto: Context) {
-        var contatoPreferencias = PreferenciasSeguranca(contexto)
-        var chaveIdContato = ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO
-        var chaveImagemContato = ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO
-        var chaveUsernameContato = ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO
+        val contatoPreferencias = PreferenciasSeguranca(contexto)
+        val chaveIdContato = ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO
+        val chaveImagemContato = ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO
+        val chaveUsernameContato = ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO
 
-        var dicionarioDadosRecebedor = mapOf(
+        val dicionarioDadosRecebedor = mapOf(
             Pair(chaveIdContato, contatoPreferencias.buscaValorContato(chaveIdContato)),
             Pair(chaveImagemContato, contatoPreferencias.buscaValorContato(chaveImagemContato)),
             Pair(chaveUsernameContato, contatoPreferencias.buscaValorContato(chaveUsernameContato))
@@ -37,33 +38,29 @@ class PagamentoViewModel : ViewModel() {
         dadosRecebedorLiveData.value = dicionarioDadosRecebedor
     }
 
-    fun enviaDadosTransacao(contexto: Context, valor: Double) {
+    fun enviaDadosTransacao(contexto: Context, valor: BigDecimal) {
         capturaDadosCartao(contexto)
         val transacao = criaTransacao(valor)
 
         InicializaRetrofit.servicoWeb().finalizaTransacao(transacao).enqueue(object : Callback<TransacaoResponse> {
-
             override fun onResponse(call: Call<TransacaoResponse>, response: Response<TransacaoResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { transacaoLiveData.value = it.transacao }
                 }
             }
-
             override fun onFailure(call: Call<TransacaoResponse>, t: Throwable) {
-                println("Erro - onFailure - enviaDadosTransacao")
                 Log.e("Erro onFailure", t.message)
             }
-
         })
     }
 
-    private fun criaTransacao(valor: Double): PagamentoResponse {
+    private fun criaTransacao(valor: BigDecimal): PagamentoResponse {
         val idRecebedor = dadosRecebedorLiveData.value?.get(ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO)?.toInt()
         return PagamentoResponse(mNumeroCartao, mCvv, valor, mVencimento, idRecebedor!!)
     }
 
     private fun capturaDadosCartao(contexto: Context) {
-        var cartaoPreferencias = PreferenciasSeguranca(contexto)
+        val cartaoPreferencias = PreferenciasSeguranca(contexto)
 
         mNumeroCartao = cartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO)
         mVencimento = cartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO)

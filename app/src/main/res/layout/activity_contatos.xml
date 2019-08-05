@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/tela_contatos"
         tools:context=".apresentacao.contatos.ContatosActivity"
         android:padding="18dp"
         android:focusableInTouchMode="true">

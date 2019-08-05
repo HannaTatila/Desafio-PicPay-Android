@@ -16,7 +16,7 @@
             android:background="@null"
             android:scaleType="centerInside"
             android:tint="@color/colorAccent"
-    />
+            android:contentDescription="Botão voltar"/>
 
     <ImageView
             android:id="@+id/imageView2"
@@ -31,7 +31,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_cartao_credito"/>
+            app:srcCompat="@drawable/ic_cartao_credito"
+            android:contentDescription="Imagem de cartão de crédito"/>
 
     <TextView
             android:id="@+id/textView2"
@@ -65,15 +66,14 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
     <Button
-            android:text="@string/botao_cadastrar_cartao"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
             android:id="@+id/button_cadastrar_cartao"
-            android:background="@drawable/shape_botao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:textAllCaps="false"/>
+            style="@style/CustomizaBotaoPadrao"
+            android:layout_margin="16dp"
+            android:text="@string/botao_cadastrar_cartao"/>
 
 </android.support.constraint.ConstraintLayout>

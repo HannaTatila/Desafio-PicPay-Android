@@ -15,11 +15,14 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
+import com.hanna.picpaydesafio.apresentacao.contatos.ContatosActivity
 import com.hanna.picpaydesafio.dados.ConstantesPersistencia
 import com.hanna.picpaydesafio.dados.PreferenciasSeguranca
 import kotlinx.android.synthetic.main.activity_pagamento.*
 import kotlinx.android.synthetic.main.view_recibo.view.*
 import org.jetbrains.anko.toast
+import java.math.BigDecimal
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,7 +32,9 @@ class PagamentoActivity : AppCompatActivity() {
     private lateinit var mContatoPreferencias: PreferenciasSeguranca
     private lateinit var mPagamentoViewModel: PagamentoViewModel
     private var mNumeroCartao: String? = ""
-    private var mNumeroCartaoProtegido: String? = ""
+    private var mNumeroCartaoProtegido: String = ""
+    private var mUrlImagemContato: String = ""
+    private var mUsernameContato: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +51,13 @@ class PagamentoActivity : AppCompatActivity() {
 
     private fun capturaNumeroCartao() {
         val pacote = intent.extras
-        pacote.let {
+        if (pacote != null) {
             mNumeroCartao = pacote.getString("NUMERO_CARTAO") //TODO: criar constante
         }
     }
 
     private fun protegeNumeroCartao() {
-        mNumeroCartaoProtegido = mNumeroCartao?.take(4)
+        mNumeroCartaoProtegido = mNumeroCartao!!.take(4)
     }
 
     private fun manipulaPagamentoViewModel() {
@@ -66,26 +71,17 @@ class PagamentoActivity : AppCompatActivity() {
     private fun recebedorObserver(mPagamentoViewModel: PagamentoViewModel) {
         mPagamentoViewModel.dadosRecebedorLiveData.observe(this, Observer {
             it?.let { dadosRecebedor ->
-                var urlImagem: String? = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO]
-                Glide.with(this@PagamentoActivity).load(urlImagem).into(image_foto_contato)
-                text_username_contato.text = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO]
-                text_numero_cartao.text = "Mastercard $mNumeroCartaoProtegido •"
+                mUrlImagemContato = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO].toString()
+                mUsernameContato = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO].toString()
+                incorporaDadosView()
             }
         })
     }
 
-    private fun transacaoObserver(mPagamentoViewModel: PagamentoViewModel) {
-        mPagamentoViewModel.transacaoLiveData.observe(this, Observer {
-            it?.let { transacao ->
-                if (transacao.sucesso) {
-                    toast(getString(R.string.mag_sucesso_pagamento))
-                    val viewRecibo = criaViewRecibo()
-                    geraRecibo(viewRecibo, transacao.recebedor.imagem, transacao.recebedor.username, transacao.id)
-                } else {
-                    toast(getString(R.string.mag_recusa_pagamento))
-                }
-            }
-        })
+    private fun incorporaDadosView() {
+        Glide.with(this@PagamentoActivity).load(mUrlImagemContato).into(image_foto_contato)
+        text_username_contato.text = mUsernameContato
+        text_numero_cartao.text = "Mastercard $mNumeroCartaoProtegido •"
     }
 
     private fun capturaEventoAtualizacaoValor() {
@@ -95,7 +91,8 @@ class PagamentoActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val conteudoCampoValor = currencyedit_valor.text.toString().trim()
-                val valorFoiPreenchido = conteudoCampoValor.isNotEmpty() && conteudoCampoValor != "0,00"
+                val valorFoiPreenchido =
+                    conteudoCampoValor.isNotBlank() && conteudoCampoValor.isNotEmpty() //&& conteudoCampoValor != "0,00"
                 if (valorFoiPreenchido) customizaTela(R.color.colorAccent) else customizaTela(R.color.corCinzaBotaoDesabilitado)
                 button_pagar.isEnabled = valorFoiPreenchido
             }
@@ -111,37 +108,69 @@ class PagamentoActivity : AppCompatActivity() {
     private fun controlaEventoClique() {
         botao_voltar_pagamento.setOnClickListener { onBackPressed() }
 
-        link_editar_cartao.setOnClickListener { chamaTelaCadastro() }
+        link_editar_cartao.setOnClickListener { chamaTelaCadastroCartao() }
 
         button_pagar.setOnClickListener {
-            //val valorPagamento = currencyedit_valor.text.toString().toDouble() TODO: transformar em BigDecimal depois
-            val valorPagamento: Double = 5.52 //TODO: erro ao passar o valor Double
+            val valorPagamento = formataParaBigDecimal()
             mPagamentoViewModel.enviaDadosTransacao(this, valorPagamento)
         }
     }
 
-    private fun chamaTelaCadastro() {
-        val intent = CadastroCartaoActivity.buscaIntent(this, mNumeroCartao)
-        this.startActivity(intent)
+    private fun formataParaBigDecimal(): BigDecimal {
+        val valorFormatado = currencyedit_valor.text.toString()
+            .replace(".", "", true)
+            .replace(",", ".", true)
+        return valorFormatado.toBigDecimal()
+    }
+
+    private fun transacaoObserver(mPagamentoViewModel: PagamentoViewModel) {
+        mPagamentoViewModel.transacaoLiveData.observe(this, Observer {
+            it?.let { transacao ->
+                if (transacao.sucesso) {
+                    //mostraCarregamento()
+                    toast(getString(R.string.mag_sucesso_pagamento))
+                    configuraViewRecibo(transacao.id, transacao.valor)
+                } else {
+                    toast(getString(R.string.mag_recusa_pagamento))
+                }
+            }
+        })
+    }
+
+    private fun configuraViewRecibo(idTransacao: Int, valor: BigDecimal) {
+        val viewRecibo = criaViewRecibo()
+        incorporaDadosViewRecibbo(viewRecibo, idTransacao, valor)
+        mostraRecibo(viewRecibo)
     }
 
     fun criaViewRecibo(): View {
-        return this.layoutInflater.inflate(R.layout.view_recibo, null)
+        return this.layoutInflater.inflate(R.layout.view_recibo, tela_pagamento)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun geraRecibo(view: View, imagem: String, username: String, idTransacao: Int) {
-        Glide.with(view.context).load(imagem).into(view.img_foto_contato)
-        view.txt_username_contato.text = username
-        view.txt_numero_transacao.text = getString(R.string.transacao) + idTransacao.toString()
+    private fun incorporaDadosViewRecibbo(viewRecibo: View, idTransacao: Int, valor: BigDecimal) {
+        Glide.with(viewRecibo.context).load(mUrlImagemContato).into(viewRecibo.img_foto_contato)
+        viewRecibo.txt_username_contato.text = mUsernameContato
+        viewRecibo.txt_numero_transacao.text = getString(R.string.transacao) + idTransacao.toString()
+        viewRecibo.txt_dados_cartao.text = "Cartão Master $mNumeroCartaoProtegido"
+
+        val valorEmReal = formataBigDecimalParaMoeda(valor)
+        viewRecibo.txt_valor.text = valorEmReal
+        viewRecibo.txt_total_pago.text = valorEmReal
 
         val dataHoraAtual = buscaDataHoraAtual() //timestamp
-        view.txt_data_hora.text = dataHoraAtual
+        viewRecibo.txt_data_hora.text = dataHoraAtual
+    }
 
-        view.txt_dados_cartao.text = "Cartão Master $mNumeroCartaoProtegido"
+    fun formataBigDecimalParaMoeda(valor: BigDecimal): String {
+        val formatacaoParaReal = DecimalFormat
+            .getCurrencyInstance(Locale("pt", "br"))
+        return formatacaoParaReal.format(valor)
+    }
 
+    private fun mostraRecibo(viewRecibo: View) {
         val caixaDialogo = BottomSheetDialog(this)
-        caixaDialogo.setContentView(view)
+        caixaDialogo.setContentView(viewRecibo)
         caixaDialogo.show()
     }
 
@@ -169,6 +198,20 @@ class PagamentoActivity : AppCompatActivity() {
         //val date = DateFormat.format("dd-MM-yyyy 'às' hh:mm:ss", calendario).toString()
     }
 
+    private fun mostraCarregamento() {
+        progress_bar.visibility = View.VISIBLE
+        tela_pagamento.visibility = View.GONE
+    }
+
+    private fun chamaTelaCadastroCartao() {
+        val intent = CadastroCartaoActivity.buscaIntent(this, mNumeroCartao)
+        this.startActivity(intent)
+    }
+
+    private fun chamaTelaContatos() {
+        val intent = ContatosActivity.buscaIntent(this)
+        this.startActivity(intent)
+    }
 
     companion object {
         private const val NUMERO_CARTAO = "NUMERO_CARTAO" //TODO: criar constante
@@ -180,15 +223,4 @@ class PagamentoActivity : AppCompatActivity() {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    private fun configuraNumeroCartao() {
-        val pacote = intent.extras
-        if (pacote != null) {
-            mNumeroCartao = pacote.getString("NUMERO_CARTAO") //TODO: criar constante
-            mNumeroCartaoProtegido = mNumeroCartao.take(4)
-        }
-    }
-    */
 }

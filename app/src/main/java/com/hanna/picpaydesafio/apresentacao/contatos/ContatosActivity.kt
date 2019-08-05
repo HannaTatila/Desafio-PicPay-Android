@@ -2,6 +2,7 @@ package com.hanna.picpaydesafio.apresentacao.contatos
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -103,5 +104,10 @@ class ContatosActivity : AppCompatActivity() {
         mDisposable?.dispose()
     }
 
+    companion object {
+        fun buscaIntent(contexto: Context): Intent {
+            return Intent(contexto, ContatosActivity::class.java)
+        }
+    }
 
 }

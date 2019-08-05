@@ -25,9 +25,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="CustomizaCampoBuscaAtivo" parent="@android:style/TextAppearance">
-        <item name="android:drawableRight">@drawable/ic_botao_fechar</item>
+    <style name="CustomizaBotaoPadrao" parent="Widget.AppCompat.Button">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/shape_botao</item>
     </style>
-
 
 </resources>

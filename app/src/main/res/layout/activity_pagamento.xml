@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="0dp"
+        android:id="@+id/tela_pagamento"
         tools:context=".apresentacao.pagamento.PagamentoActivity">
 
     <ImageButton
@@ -19,7 +19,7 @@
             android:background="@null"
             android:scaleType="centerInside"
             android:tint="@color/colorAccent"
-    />
+            android:contentDescription="Botão voltar"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_foto_contato"
@@ -94,8 +94,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:layout_marginRight="6dp"
+                android:layout_marginEnd="6dp"
                 android:textColor="@color/corFonteBranca"
-                android:text="Mastercard 1234 * "/>
+                tools:text="Mastercard 1234 * "/>
 
         <TextView
                 android:id="@+id/link_editar_cartao"
@@ -113,14 +114,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_gravity="center_horizontal"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:textAllCaps="false"
+            style="@style/CustomizaBotaoPadrao"
             android:layout_margin="16dp"
-            android:background="@drawable/shape_botao"
             android:text="Pagar"
             android:enabled="false"/>
+
+    <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:indeterminateDuration="@android:integer/config_mediumAnimTime"
+            android:scrollbarFadeDuration="@android:integer/config_mediumAnimTime"
+            android:scrollbarDefaultDelayBeforeFade="@android:integer/config_mediumAnimTime"/>
 
 
 </android.support.constraint.ConstraintLayout>
