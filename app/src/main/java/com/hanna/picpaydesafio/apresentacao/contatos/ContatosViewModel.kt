@@ -4,16 +4,15 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.util.Log
-import com.hanna.picpaydesafio.dados.ConstantesPersistencia
-import com.hanna.picpaydesafio.dados.InicializaRetrofit
-import com.hanna.picpaydesafio.dados.PreferenciasSeguranca
+import com.hanna.picpaydesafio.dados.comunicacaoServidor.InicializaRetrofit
 import com.hanna.picpaydesafio.dados.modelo.Contato
-import com.hanna.picpaydesafio.dados.response.ContatoResponse
+import com.hanna.picpaydesafio.dados.persistencia.PreferenciasSeguranca
+import com.hanna.picpaydesafio.dados.resposta.ContatoResponse
+import com.hanna.picpaydesafio.util.ConstantesPersistencia
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// Dica: não receber qualquer referência de Activity na ViewModel
 class ContatosViewModel : ViewModel() {
 
     val contatoLiveData: MutableLiveData<List<Contato>> = MutableLiveData()
@@ -45,6 +44,7 @@ class ContatosViewModel : ViewModel() {
         return listaContatos
     }
 
+    // Salva?
     fun gravaDadosContatoSelecionado(contexto: Context, contato: Contato) {
         val mContatoPreferencias = PreferenciasSeguranca(contexto)
 

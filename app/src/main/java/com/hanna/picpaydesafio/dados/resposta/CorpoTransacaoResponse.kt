@@ -1,4 +1,4 @@
-package com.hanna.picpaydesafio.dados.response
+package com.hanna.picpaydesafio.dados.resposta
 
 import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal

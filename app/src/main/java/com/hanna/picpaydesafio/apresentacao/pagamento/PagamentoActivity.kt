@@ -16,8 +16,7 @@ import com.bumptech.glide.Glide
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.contatos.ContatosActivity
-import com.hanna.picpaydesafio.dados.ConstantesPersistencia
-import com.hanna.picpaydesafio.dados.PreferenciasSeguranca
+import com.hanna.picpaydesafio.util.ConstantesPersistencia
 import kotlinx.android.synthetic.main.activity_pagamento.*
 import kotlinx.android.synthetic.main.view_recibo.view.*
 import org.jetbrains.anko.toast
@@ -29,8 +28,9 @@ import java.util.*
 
 class PagamentoActivity : AppCompatActivity() {
 
-    private lateinit var mContatoPreferencias: PreferenciasSeguranca
+    //private lateinit var mContatoPreferencias: PreferenciasSeguranca
     private lateinit var mPagamentoViewModel: PagamentoViewModel
+    //TODO: pegar campo
     private var mNumeroCartao: String? = ""
     private var mNumeroCartaoProtegido: String = ""
     private var mUrlImagemContato: String = ""
@@ -40,7 +40,7 @@ class PagamentoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pagamento)
 
-        mContatoPreferencias = PreferenciasSeguranca(this)
+        //mContatoPreferencias = PreferenciasSeguranca(this)
 
         capturaNumeroCartao()
         protegeNumeroCartao()
@@ -70,14 +70,15 @@ class PagamentoActivity : AppCompatActivity() {
 
     private fun recebedorObserver(mPagamentoViewModel: PagamentoViewModel) {
         mPagamentoViewModel.dadosRecebedorLiveData.observe(this, Observer {
-            it?.let { dadosRecebedor ->
-                mUrlImagemContato = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO].toString()
-                mUsernameContato = dadosRecebedor[ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO].toString()
+            it?.let { recebedor ->
+                mUrlImagemContato = recebedor[ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO].toString()
+                mUsernameContato = recebedor[ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO].toString()
                 incorporaDadosView()
             }
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun incorporaDadosView() {
         Glide.with(this@PagamentoActivity).load(mUrlImagemContato).into(image_foto_contato)
         text_username_contato.text = mUsernameContato
@@ -88,17 +89,21 @@ class PagamentoActivity : AppCompatActivity() {
         currencyedit_valor.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val conteudoCampoValor = currencyedit_valor.text.toString().trim()
-                val valorFoiPreenchido =
-                    conteudoCampoValor.isNotBlank() && conteudoCampoValor.isNotEmpty() //&& conteudoCampoValor != "0,00"
+                val valorFoiPreenchido = verificaValorPreenchido()
                 if (valorFoiPreenchido) customizaTela(R.color.colorAccent) else customizaTela(R.color.corCinzaBotaoDesabilitado)
                 button_pagar.isEnabled = valorFoiPreenchido
             }
         })
     }
 
+    private fun verificaValorPreenchido(): Boolean {
+        val conteudoCampoValor = currencyedit_valor.text.toString()//.toDouble()
+        //TODO: transformar 0,00 em int e comparar a zero
+        return conteudoCampoValor.isNotEmpty() && conteudoCampoValor != "0,00"
+    }
+
+    // Tentar melhorar o nome do metodo
     private fun customizaTela(corTexto: Int) {
         val cor = ContextCompat.getColor(this@PagamentoActivity, corTexto)
         currencyedit_valor.setTextColor(cor)
@@ -111,6 +116,7 @@ class PagamentoActivity : AppCompatActivity() {
         link_editar_cartao.setOnClickListener { chamaTelaCadastroCartao() }
 
         button_pagar.setOnClickListener {
+            // criar metodo separado
             val valorPagamento = formataParaBigDecimal()
             mPagamentoViewModel.enviaDadosTransacao(this, valorPagamento)
         }
@@ -129,7 +135,7 @@ class PagamentoActivity : AppCompatActivity() {
                 if (transacao.sucesso) {
                     //mostraCarregamento()
                     toast(getString(R.string.mag_sucesso_pagamento))
-                    configuraViewRecibo(transacao.id, transacao.valor)
+                    configuraViewRecibo(transacao.id, transacao.valor, transacao.timestamp)
                 } else {
                     toast(getString(R.string.mag_recusa_pagamento))
                 }
@@ -137,18 +143,18 @@ class PagamentoActivity : AppCompatActivity() {
         })
     }
 
-    private fun configuraViewRecibo(idTransacao: Int, valor: BigDecimal) {
+    private fun configuraViewRecibo(idTransacao: Int, valor: BigDecimal, timestamp: String) {
         val viewRecibo = criaViewRecibo()
-        incorporaDadosViewRecibbo(viewRecibo, idTransacao, valor)
+        incorporaDadosViewRecibbo(viewRecibo, idTransacao, valor, timestamp)
         mostraRecibo(viewRecibo)
     }
 
     fun criaViewRecibo(): View {
-        return this.layoutInflater.inflate(R.layout.view_recibo, tela_pagamento)
+        return this.layoutInflater.inflate(R.layout.view_recibo, null)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun incorporaDadosViewRecibbo(viewRecibo: View, idTransacao: Int, valor: BigDecimal) {
+    private fun incorporaDadosViewRecibbo(viewRecibo: View, idTransacao: Int, valor: BigDecimal, timestamp: String) {
         Glide.with(viewRecibo.context).load(mUrlImagemContato).into(viewRecibo.img_foto_contato)
         viewRecibo.txt_username_contato.text = mUsernameContato
         viewRecibo.txt_numero_transacao.text = getString(R.string.transacao) + idTransacao.toString()
@@ -158,7 +164,7 @@ class PagamentoActivity : AppCompatActivity() {
         viewRecibo.txt_valor.text = valorEmReal
         viewRecibo.txt_total_pago.text = valorEmReal
 
-        val dataHoraAtual = buscaDataHoraAtual() //timestamp
+        val dataHoraAtual = buscaDataHoraAtual(timestamp)
         viewRecibo.txt_data_hora.text = dataHoraAtual
     }
 
@@ -174,8 +180,8 @@ class PagamentoActivity : AppCompatActivity() {
         caixaDialogo.show()
     }
 
-    private fun buscaDataHoraAtual(): String { //timestamp: String): String {
-        val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale("pt", "BR"))
+    private fun buscaDataHoraAtual(timestamp: String): String {
+        /*val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale("pt", "BR"))
         val calendario = Calendar.getInstance()
 
         val ano = calendario.get(Calendar.YEAR)
@@ -187,14 +193,14 @@ class PagamentoActivity : AppCompatActivity() {
         calendario.set(ano, mes, diaDoMes, hora, minuto)
         println(calendario.time)
 
-        return formatoDataHora.format(calendario.time)
+        return formatoDataHora.format(calendario.time)*/
 
-        /*
+
         val calendario = Calendar.getInstance()
         calendario.timeInMillis = timestamp.toLong()
         val formatoDataHora = SimpleDateFormat("dd-MM-yyyy 'àsss' hh:mm", Locale.getDefault())
         return formatoDataHora.format(calendario.timeInMillis)
-        */
+
         //val date = DateFormat.format("dd-MM-yyyy 'às' hh:mm:ss", calendario).toString()
     }
 

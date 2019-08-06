@@ -4,12 +4,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.util.Log
-import com.hanna.picpaydesafio.dados.ConstantesPersistencia
-import com.hanna.picpaydesafio.dados.InicializaRetrofit
-import com.hanna.picpaydesafio.dados.PreferenciasSeguranca
-import com.hanna.picpaydesafio.dados.response.CorpoTransacaoResponse
-import com.hanna.picpaydesafio.dados.response.PagamentoResponse
-import com.hanna.picpaydesafio.dados.response.TransacaoResponse
+import com.hanna.picpaydesafio.dados.comunicacaoServidor.InicializaRetrofit
+import com.hanna.picpaydesafio.dados.persistencia.PreferenciasSeguranca
+import com.hanna.picpaydesafio.dados.resposta.CorpoTransacaoResponse
+import com.hanna.picpaydesafio.dados.resposta.PagamentoResponse
+import com.hanna.picpaydesafio.dados.resposta.TransacaoResponse
+import com.hanna.picpaydesafio.util.ConstantesPersistencia
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,22 +21,37 @@ class PagamentoViewModel : ViewModel() {
     private var mVencimento: String = ""
     private var mCvv: String = ""
     var dadosRecebedorLiveData: MutableLiveData<Map<String, String>> = MutableLiveData()
+    //var dadosRecebedorLiveData: MutableLiveData<Contato> = MutableLiveData()
     var transacaoLiveData: MutableLiveData<CorpoTransacaoResponse> = MutableLiveData()
 
     fun buscaDadosRecebedor(contexto: Context) {
+        val cartaoPreferencias = PreferenciasSeguranca(contexto)
+
+        val chaveIdContato = ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO
+        val chaveImagemContato = ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO
+        val chaveUsernameContato = ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO
+
+        val dicionarioDadosCartao = mapOf(
+            Pair(chaveIdContato, cartaoPreferencias.buscaValorContato(chaveIdContato)),
+            Pair(chaveImagemContato, cartaoPreferencias.buscaValorContato(chaveImagemContato)),
+            Pair(chaveUsernameContato, cartaoPreferencias.buscaValorContato(chaveUsernameContato))
+        )
+
+        dadosRecebedorLiveData.value = dicionarioDadosCartao
+    }
+/*        var contato: Contato? = null
+
         val contatoPreferencias = PreferenciasSeguranca(contexto)
         val chaveIdContato = ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO
         val chaveImagemContato = ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO
         val chaveUsernameContato = ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO
 
-        val dicionarioDadosRecebedor = mapOf(
-            Pair(chaveIdContato, contatoPreferencias.buscaValorContato(chaveIdContato)),
-            Pair(chaveImagemContato, contatoPreferencias.buscaValorContato(chaveImagemContato)),
-            Pair(chaveUsernameContato, contatoPreferencias.buscaValorContato(chaveUsernameContato))
-        )
+        contato?.id = contatoPreferencias.buscaValorContato(chaveIdContato).toInt()
+        contato?.imagem = contatoPreferencias.buscaValorContato(chaveImagemContato)
+        contato?.username = contatoPreferencias.buscaValorContato(chaveUsernameContato)
 
-        dadosRecebedorLiveData.value = dicionarioDadosRecebedor
-    }
+        dadosRecebedorLiveData.value = contato
+    }*/
 
     fun enviaDadosTransacao(contexto: Context, valor: BigDecimal) {
         capturaDadosCartao(contexto)
@@ -48,6 +63,7 @@ class PagamentoViewModel : ViewModel() {
                     response.body()?.let { transacaoLiveData.value = it.transacao }
                 }
             }
+
             override fun onFailure(call: Call<TransacaoResponse>, t: Throwable) {
                 Log.e("Erro onFailure", t.message)
             }
@@ -55,10 +71,13 @@ class PagamentoViewModel : ViewModel() {
     }
 
     private fun criaTransacao(valor: BigDecimal): PagamentoResponse {
-        val idRecebedor = dadosRecebedorLiveData.value?.get(ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO)?.toInt()
-        return PagamentoResponse(mNumeroCartao, mCvv, valor, mVencimento, idRecebedor!!)
+        val idRecebedor =
+            dadosRecebedorLiveData.value?.getValue(ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO)!!.toInt()
+        // TODO: analisar se eh pagamento ou pagamentoResponse
+        return PagamentoResponse(mNumeroCartao, mCvv, valor, mVencimento, idRecebedor)
     }
 
+    //TODO: criar metodo generico no SharedPreferences
     private fun capturaDadosCartao(contexto: Context) {
         val cartaoPreferencias = PreferenciasSeguranca(contexto)
 
@@ -66,4 +85,15 @@ class PagamentoViewModel : ViewModel() {
         mVencimento = cartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO)
         mCvv = cartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.CVV)
     }
+
+/*
+    private fun capturaDadosCartao(contexto: Context) {
+
+        mNumeroCartao = cartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO)
+        mVencimento = cartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO)
+        mCvv = cartaoPreferencias.buscaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.CVV)
+
+        return Cartao()
+    }
+    */
 }

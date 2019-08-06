@@ -1,8 +1,8 @@
-package com.hanna.picpaydesafio.dados
+package com.hanna.picpaydesafio.dados.comunicacaoServidor
 
-import com.hanna.picpaydesafio.dados.response.ContatoResponse
-import com.hanna.picpaydesafio.dados.response.PagamentoResponse
-import com.hanna.picpaydesafio.dados.response.TransacaoResponse
+import com.hanna.picpaydesafio.dados.resposta.ContatoResponse
+import com.hanna.picpaydesafio.dados.resposta.PagamentoResponse
+import com.hanna.picpaydesafio.dados.resposta.TransacaoResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

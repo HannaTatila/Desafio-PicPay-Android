@@ -12,7 +12,7 @@ import android.text.TextWatcher
 import android.view.View
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
-import com.hanna.picpaydesafio.dados.ConstantesPersistencia
+import com.hanna.picpaydesafio.util.ConstantesPersistencia
 import kotlinx.android.synthetic.main.activity_cadastro_cartao.*
 import org.jetbrains.anko.toast
 
@@ -45,9 +45,10 @@ class CadastroCartaoActivity : AppCompatActivity() {
 
     private fun capturaEventoCliqueBotao() {
         botao_voltar_cadastro_cartao.setOnClickListener { onBackPressed() }
-        button_salvar_cartao.setOnClickListener { salvarCartao() }
+        button_salvar_cartao.setOnClickListener { botaoSalvarCartaoClicado() }
     }
 
+    // buscaDadosCasoSejaAtualizacao
     private fun verificaSeEAtualizacao() {
         val existeCartaoCadastrado = verificaExistenciaCartao()
         if (existeCartaoCadastrado) {
@@ -61,43 +62,60 @@ class CadastroCartaoActivity : AppCompatActivity() {
         return pacote != null
     }
 
+    //refatorar
     private fun cartaoObserver() {
         mCartaoViewModel.dadosCartaoLiveData.observe(this, Observer {
-            it?.let { dadosCartao ->
-                mNumeroCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO])
-                mTitularCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR])
-                mVencimentoCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO])
-                mCvvCartao.setText(dadosCartao[ConstantesPersistencia.CHAVE_CARTAO.CVV])
+            it?.let { cartao ->
+                mNumeroCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO])
+                mTitularCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR])
+                mVencimentoCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO])
+                mCvvCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.CVV])
             }
         })
     }
 
+    // Thanner
     private fun capturaEventoAtualizacaoDosCampos() {
         val listaCamposEditText =
-            listOf<TextInputEditText>(mNumeroCartao, mTitularCartao, mVencimentoCartao, mCvvCartao)
+            listOf(mNumeroCartao, mTitularCartao, mVencimentoCartao, mCvvCartao)
 
         for (editText in listaCamposEditText) {
-            editText.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {}
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val camposValidos = verificaTodosCamposPreenchidos()
-                    customizaBotao(camposValidos)
-                }
-            })
+            capturaEventoCampo(editText)
         }
     }
 
-    private fun verificaTodosCamposPreenchidos(): Boolean {
+    private fun capturaEventoCampo(editText: TextInputEditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                customizaBotao()
+            }
+        })
+    }
+
+    private fun customizaBotao() {
+        val camposValidos = verificaSeTodosCamposEstaoPreenchidos()
+        if (camposValidos) button_salvar_cartao.visibility = View.VISIBLE
+        else button_salvar_cartao.visibility = View.GONE
+    }
+
+    private fun verificaSeTodosCamposEstaoPreenchidos(): Boolean {
         return mNumeroCartao.text.toString() != ""
                 && mTitularCartao.text.toString() != ""
                 && mVencimentoCartao.text.toString() != ""
                 && mCvvCartao.text.toString() != ""
     }
 
-    private fun customizaBotao(camposValidos: Boolean) {
-        if (camposValidos) button_salvar_cartao.visibility = View.VISIBLE
-        else button_salvar_cartao.visibility = View.GONE
+    private fun botaoSalvarCartaoClicado() {
+        try {
+            val numeroCartao = mNumeroCartao.text.toString()
+            salvarCartao()
+            toast(getString(R.string.msg_sucesso_cadastro))
+            chamaTelaPagamento(numeroCartao)
+        } catch (e: Exception) {
+            toast(getString(R.string.msg_erro_inesperado))
+        }
     }
 
     private fun salvarCartao() {
@@ -108,11 +126,10 @@ class CadastroCartaoActivity : AppCompatActivity() {
             val cvv = mCvvCartao.text.toString()
 
             mCartaoViewModel.armazenaDadosCartao(this, numeroCartao, nomeTitular, vencimento, cvv)
-            toast(getString(R.string.msg_sucesso_cadastro))
-            chamaTelaPagamento(numeroCartao)
+            // chamaTelaPagamento(numeroCartao)
         } catch (e: Exception) {
-            println(e.message.toString())
-            toast(getString(R.string.msg_erro_inesperado))
+            // toast(getString(R.string.msg_erro_inesperado))
+            throw Exception()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.hanna.picpaydesafio.dados
+package com.hanna.picpaydesafio.dados.persistencia
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,6 +8,7 @@ class PreferenciasSeguranca(contexto: Context) {
 
     private val mContatoSharedPreferences: SharedPreferences =
         contexto.getSharedPreferences("contatosPicpay", Context.MODE_PRIVATE)
+
     private val mCartaoSharedPreferences: SharedPreferences =
         contexto.getSharedPreferences("cartaoPicpay", Context.MODE_PRIVATE)
 
@@ -21,6 +22,7 @@ class PreferenciasSeguranca(contexto: Context) {
 
     fun armazenaValorCartao(chave: String, valor: String) {
         mCartaoSharedPreferences.edit().putString(chave, valor).apply()
+
     }
 
     fun buscaValorCartao(chave: String): String {

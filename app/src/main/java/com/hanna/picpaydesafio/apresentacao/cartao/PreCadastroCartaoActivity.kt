@@ -18,13 +18,13 @@ class PreCadastroCartaoActivity : AppCompatActivity() {
 
     private fun controlaEventoClique() {
         botao_voltar_pre_cadastro.setOnClickListener { onBackPressed() }
+
         button_cadastrar_cartao.setOnClickListener { chamaTelaCadastro() }
     }
 
     private fun chamaTelaCadastro() {
         val intent = CadastroCartaoActivity.buscaIntent(this, null)
         this.startActivity(intent)
-
     }
 
     companion object {

@@ -1,4 +1,4 @@
-package com.hanna.picpaydesafio.dados
+package com.hanna.picpaydesafio.util
 
 class ConstantesPersistencia private constructor() {
 

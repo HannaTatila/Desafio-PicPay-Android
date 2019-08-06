@@ -12,7 +12,6 @@ import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.cartao.PreCadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
-import com.jakewharton.rxbinding2.widget.query
 import com.jakewharton.rxbinding2.widget.queryTextChanges
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_contatos.*
@@ -42,7 +41,6 @@ class ContatosActivity : AppCompatActivity() {
                     val adapterContatos = ListaContatosAdapter(contatos) { contato ->
                         viewModelContatos.gravaDadosContatoSelecionado(this@ContatosActivity, contato)
                         mNumeroCartaoCadastrado = viewModelContatos.buscaNumeroCartaoCadastrado(this@ContatosActivity)
-                        //restauraCampoBusca()
                         defineProximaTela()
                     }
 
@@ -56,8 +54,6 @@ class ContatosActivity : AppCompatActivity() {
     }
 
     private fun verificaMudancaCampoBusca(adapterContatos: ListaContatosAdapter) {
-        //search_contatos.setOnClickListener { onWindowFocusChanged(true) }
-
         mDisposable = search_contatos.queryTextChanges()
             .skipInitialValue()
             .subscribe { termo ->
@@ -66,41 +62,26 @@ class ContatosActivity : AppCompatActivity() {
             }
     }
 
-
-    fun restauraCampoBusca() {
-        search_contatos.run {
-            clearFocus()
-            query(false)
-            setOnQueryTextListener(null)
-        }
-        //search_contatos.clearComposingText()
-    }
-
     private fun defineProximaTela() {
         val existeCartaoCadastrado = mNumeroCartaoCadastrado != ""
         val intent: Intent
-        intent = if (existeCartaoCadastrado) {
-            PagamentoActivity.buscaIntent(this, mNumeroCartaoCadastrado)
-        } else {
-            PreCadastroCartaoActivity.buscaIntent(this)
-        }
-        this.startActivity(intent)
-    }
-
-    private fun defineProximaTela2() {
-        val existeCartaoCadastrado = mNumeroCartaoCadastrado != ""
-        val intent: Intent
-        intent = if (existeCartaoCadastrado) chamaTelaCadastroCartao() else chamaTelaPreCadastroCartato()
+        intent = if (existeCartaoCadastrado) chamaTelaCadastroCartao() else chamaTelaPreCadastroCartao()
         this.startActivity(intent)
     }
 
     private fun chamaTelaCadastroCartao() = PagamentoActivity.buscaIntent(this, mNumeroCartaoCadastrado)
 
-    private fun chamaTelaPreCadastroCartato() = PreCadastroCartaoActivity.buscaIntent(this)
+    private fun chamaTelaPreCadastroCartao() = PreCadastroCartaoActivity.buscaIntent(this)
 
     override fun onDestroy() {
         super.onDestroy()
         mDisposable?.dispose()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        search_contatos.setQuery("", false)
+        search_contatos.clearFocus()
     }
 
     companion object {

@@ -51,6 +51,7 @@
                         android:background="@drawable/shape_campo_busca"
                         android:queryHint="@string/hint_campo_busca"
                         android:iconifiedByDefault="false"
+                        app:queryBackground="@android:color/transparent"
                         android:lines="1"/>
 
             </LinearLayout>
