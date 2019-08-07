@@ -13,7 +13,7 @@ import android.view.View
 import android.widget.Button
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
-import com.hanna.picpaydesafio.util.ConstantesPersistencia
+import com.hanna.picpaydesafio.util.ConstantesPacoteIntent
 import kotlinx.android.synthetic.main.activity_cadastro_cartao.*
 import org.jetbrains.anko.toast
 
@@ -59,14 +59,13 @@ class CadastroCartaoActivity : AppCompatActivity() {
         return pacote != null
     }
 
-    //TODO: Refazer
     private fun cartaoObserver() {
         mCartaoViewModel.dadosCartaoLiveData.observe(this, Observer {
-            it?.let { cartao ->
-                mCampoNumeroCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO])
-                mCampoTitularCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR])
-                mCampoVencimentoCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO])
-                mCampoCvvCartao.setText(cartao[ConstantesPersistencia.CHAVE_CARTAO.CVV])
+            it?.let { cartaoCadastrado ->
+                mCampoNumeroCartao.setText(cartaoCadastrado.numero)
+                mCampoTitularCartao.setText(cartaoCadastrado.nome)
+                mCampoVencimentoCartao.setText(cartaoCadastrado.vencimento)
+                mCampoCvvCartao.setText(cartaoCadastrado.cvv)
             }
         })
     }
@@ -75,6 +74,7 @@ class CadastroCartaoActivity : AppCompatActivity() {
         val listaCamposEditText =
             listOf(mCampoNumeroCartao, mCampoTitularCartao, mCampoVencimentoCartao, mCampoCvvCartao)
 
+        //mCampoVencimentoCartao.addTextChangedListener(Mask.mask("##/##", mCampoVencimentoCartao))
         for (campo in listaCamposEditText) {
             campo.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {}
@@ -125,11 +125,9 @@ class CadastroCartaoActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val NUMERO_CARTAO = "NUMERO_CARTAO" //TODO: criar constante
-
         fun buscaIntent(contexto: Context, numeroCartao: String?): Intent {
             val pacote = Bundle()
-            pacote.putString(NUMERO_CARTAO, numeroCartao)
+            pacote.putString(ConstantesPacoteIntent.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
             return Intent(contexto, CadastroCartaoActivity::class.java).putExtras(pacote)
         }
     }

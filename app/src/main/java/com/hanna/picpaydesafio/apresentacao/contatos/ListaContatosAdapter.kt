@@ -17,13 +17,7 @@ class ListaContatosAdapter(
     private val cliqueItemLista: ((contato: Contato) -> Unit)
 ) : RecyclerView.Adapter<ListaContatosAdapter.ListaContatosViewHolder>(), Filterable {
 
-    private var mListaContatos: List<Contato>
-    private var mContatosFiltro: Filter
-
-    init {
-        this.mListaContatos = listaContatosGeral
-        this.mContatosFiltro = ContatosFiltro()
-    }
+    private var mListaContatos = listaContatosGeral
 
     override fun onCreateViewHolder(pai: ViewGroup, viewTipo: Int): ListaContatosViewHolder {
         val contexto = pai.context
@@ -57,35 +51,36 @@ class ListaContatosAdapter(
         }
     }
 
-    override fun getFilter(): Filter = mContatosFiltro
+    override fun getFilter(): Filter {
+        return object : Filter() {
 
+            override fun performFiltering(entradaFiltro: CharSequence?): FilterResults {
+                var listaFiltrada: List<Contato> = ArrayList()
 
-    private inner class ContatosFiltro : Filter() {
-
-        override fun performFiltering(entradaFiltro: CharSequence?): FilterResults {
-            var listaFiltrada: List<Contato> = ArrayList()
-
-            if (entradaFiltro != null) {
-                val termoDigitado = entradaFiltro.toString().trim().toLowerCase()
-                listaFiltrada = listaContatosGeral.filter { contato ->
-                    contato.nome.toLowerCase().contains(termoDigitado) or
-                            contato.username.toLowerCase().contains(termoDigitado)
+                if (entradaFiltro != null) {
+                    val termoDigitado = entradaFiltro.toString().trim().toLowerCase()
+                    listaFiltrada = listaContatosGeral.filter { contato ->
+                        contato.nome.toLowerCase().contains(termoDigitado) or
+                                contato.username.toLowerCase().contains(termoDigitado)
+                    }
                 }
+                return criaResutadoFiltro(listaFiltrada)
             }
 
-            val resultadoFiltro = FilterResults()
-            with(resultadoFiltro) {
-                values = listaFiltrada
-                count = listaFiltrada.size
+            private fun criaResutadoFiltro(listaFiltrada: List<Contato>): FilterResults {
+                val resultadoFiltro = FilterResults()
+                with(resultadoFiltro) {
+                    values = listaFiltrada
+                    count = listaFiltrada.size
+                }
+                return resultadoFiltro
             }
-            return resultadoFiltro
-        }
 
-        override fun publishResults(entradaFiltro: CharSequence?, resultadoFiltro: FilterResults?) {
-            mListaContatos = resultadoFiltro?.values as List<Contato>
-            notifyDataSetChanged()
+            override fun publishResults(entradaFiltro: CharSequence?, resultadoFiltro: FilterResults?) {
+                mListaContatos = resultadoFiltro?.values as List<Contato>
+                notifyDataSetChanged()
+            }
         }
     }
-
 
 }

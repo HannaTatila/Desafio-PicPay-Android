@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.contatos.ContatosActivity
-import com.hanna.picpaydesafio.util.ConstantesPersistencia
+import com.hanna.picpaydesafio.util.ConstantesPacoteIntent
 import kotlinx.android.synthetic.main.activity_pagamento.*
 import kotlinx.android.synthetic.main.view_recibo.view.*
 import me.abhinay.input.CurrencyEditText
@@ -52,7 +52,7 @@ class PagamentoActivity : AppCompatActivity() {
     private fun capturaNumeroCartao() {
         val pacote = intent.extras
         if (pacote != null) {
-            mNumeroCartao = pacote.getString("NUMERO_CARTAO") //TODO: criar constante
+            mNumeroCartao = pacote.getString(ConstantesPacoteIntent.CHAVE_CARTAO.NUMERO_CARTAO)
         }
     }
 
@@ -71,8 +71,8 @@ class PagamentoActivity : AppCompatActivity() {
     private fun recebedorObserver(mPagamentoViewModel: PagamentoViewModel) {
         mPagamentoViewModel.dadosRecebedorLiveData.observe(this, Observer {
             it?.let { recebedor ->
-                mUrlImagemContato = recebedor[ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO].toString()
-                mUsernameContato = recebedor[ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO].toString()
+                mUrlImagemContato = recebedor.imagem
+                mUsernameContato = recebedor.username
                 incorporaDadosView()
             }
         })
@@ -155,11 +155,9 @@ class PagamentoActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val NUMERO_CARTAO = "NUMERO_CARTAO" //TODO: criar constante
-
         fun buscaIntent(contexto: Context, numeroCartao: String): Intent {
             val pacote = Bundle()
-            pacote.putString(NUMERO_CARTAO, numeroCartao)
+            pacote.putString(ConstantesPacoteIntent.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
             return Intent(contexto, PagamentoActivity::class.java).putExtras(pacote)
         }
     }

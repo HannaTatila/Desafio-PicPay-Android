@@ -23,7 +23,7 @@ class ContatosActivity : AppCompatActivity() {
     private lateinit var mCadastroCartaoActivity: CadastroCartaoActivity
     private lateinit var mCampoBusca: SearchView
     private var mNumeroCartaoCadastrado: String = ""
-    private var mDisposable: Disposable? = null
+    private var mDescarte: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +61,7 @@ class ContatosActivity : AppCompatActivity() {
     }
 
     private fun verificaMudancaCampoBusca(adapterContatos: ListaContatosAdapter) {
-        //TODO: pesquisar um pouco mais sobre esse metodo
-        mDisposable = mCampoBusca.queryTextChanges()
-            .skipInitialValue()
+        mDescarte = mCampoBusca.queryTextChanges()
             .subscribe { termo ->
                 mCampoBusca.onActionViewExpanded()
                 adapterContatos.filter.filter(termo)
@@ -83,7 +81,7 @@ class ContatosActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mDisposable?.dispose()
+        mDescarte?.dispose()
     }
 
     override fun onResume() {
