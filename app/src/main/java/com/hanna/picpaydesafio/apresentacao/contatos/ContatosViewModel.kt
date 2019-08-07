@@ -19,9 +19,9 @@ class ContatosViewModel : ViewModel() {
 
     fun buscaListaContatos() {
         InicializaRetrofit.servicoWeb().buscaListaContatos().enqueue(object : Callback<List<ContatoResponse>?> {
-            override fun onResponse(call: Call<List<ContatoResponse>?>, response: Response<List<ContatoResponse>?>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { listaContatosResponse ->
+            override fun onResponse(call: Call<List<ContatoResponse>?>, resposta: Response<List<ContatoResponse>?>) {
+                if (resposta.isSuccessful) {
+                    resposta.body()?.let { listaContatosResponse ->
                         contatoLiveData.value = mapeiaContatoResponse(listaContatosResponse)
                     }
                 }
@@ -35,28 +35,16 @@ class ContatosViewModel : ViewModel() {
 
     private fun mapeiaContatoResponse(listaContatosResponse: List<ContatoResponse>): MutableList<Contato> {
         val listaContatos: MutableList<Contato> = mutableListOf()
-
         listaContatosResponse.forEach { item ->
             val contato = Contato(item.id, item.nome, item.imagem, item.username)
             listaContatos.add(contato)
         }
-
         return listaContatos
     }
 
-    // Salva?
     fun gravaDadosContatoSelecionado(contexto: Context, contato: Contato) {
         val mContatoPreferencias = PreferenciasSeguranca(contexto)
-
-        mContatoPreferencias.armazenaValorContato(
-            ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO,
-            contato.id.toString()
-        )
-        mContatoPreferencias.armazenaValorContato(ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO, contato.imagem)
-        mContatoPreferencias.armazenaValorContato(
-            ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO,
-            contato.username
-        )
+        mContatoPreferencias.salvaContato(contato)
     }
 
     fun buscaNumeroCartaoCadastrado(contexto: Context): String {

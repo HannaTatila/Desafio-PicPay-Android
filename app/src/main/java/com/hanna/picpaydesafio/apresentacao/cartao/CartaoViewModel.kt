@@ -3,6 +3,7 @@ package com.hanna.picpaydesafio.apresentacao.cartao
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
+import com.hanna.picpaydesafio.dados.modelo.Cartao
 import com.hanna.picpaydesafio.dados.persistencia.PreferenciasSeguranca
 import com.hanna.picpaydesafio.util.ConstantesPersistencia
 
@@ -11,18 +12,11 @@ class CartaoViewModel : ViewModel() {
     //var dadosCartaoLiveData: MutableLiveData<Cartao> = MutableLiveData()
 
     fun armazenaDadosCartao(
-        contexto: Context,
-        numeroCartao: String,
-        nomeTitular: String,
-        vencimento: String,
-        cvv: String
+        contexto: Context, numeroCartao: String, nomeTitular: String, vencimento: String, cvv: String
     ) {
+        val cartao = Cartao(numeroCartao, nomeTitular, vencimento, cvv)
         val cartaoPreferencias = PreferenciasSeguranca(contexto)
-
-        cartaoPreferencias.armazenaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
-        cartaoPreferencias.armazenaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR, nomeTitular)
-        cartaoPreferencias.armazenaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO, vencimento)
-        cartaoPreferencias.armazenaValorCartao(ConstantesPersistencia.CHAVE_CARTAO.CVV, cvv)
+        cartaoPreferencias.salvaCartao(cartao)
     }
 
 /*    fun buscaDadosCartao(contexto: Context) {
@@ -46,17 +40,13 @@ class CartaoViewModel : ViewModel() {
 
     fun buscaDadosCartao(contexto: Context) {
         val cartaoPreferencias = PreferenciasSeguranca(contexto)
-
-        val chaveNumero = ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO
-        val chaveNomeTitular = ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR
-        val chaveVencimento = ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO
-        val chaveCvv = ConstantesPersistencia.CHAVE_CARTAO.CVV
+        val cartaoCadastrado = cartaoPreferencias.buscaCartao()
 
         val dicionarioDadosCartao = mapOf(
-            Pair(chaveNumero, cartaoPreferencias.buscaValorCartao(chaveNumero)),
-            Pair(chaveNomeTitular, cartaoPreferencias.buscaValorCartao(chaveNomeTitular)),
-            Pair(chaveVencimento, cartaoPreferencias.buscaValorCartao(chaveVencimento)),
-            Pair(chaveCvv, cartaoPreferencias.buscaValorCartao(chaveCvv))
+            Pair(ConstantesPersistencia.CHAVE_CARTAO.NUMERO_CARTAO, cartaoCadastrado.numero),
+            Pair(ConstantesPersistencia.CHAVE_CARTAO.NOME_TITULAR, cartaoCadastrado.nome),
+            Pair(ConstantesPersistencia.CHAVE_CARTAO.VENCIMENTO, cartaoCadastrado.vencimento),
+            Pair(ConstantesPersistencia.CHAVE_CARTAO.CVV, cartaoCadastrado.cvv)
         )
 
         dadosCartaoLiveData.value = dicionarioDadosCartao

@@ -6,8 +6,9 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:background="@color/colorPrimaryDark"
-            android:padding="16dp"
             tools:context=".apresentacao.cartao.CadastroCartaoActivity">
+    <!--android:padding="16dp"-->
+
 
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -16,12 +17,12 @@
             android:orientation="vertical">
 
         <ImageButton
-                android:id="@+id/botao_voltar_cadastro_cartao"
+                android:id="@+id/ib_botaoVoltarCadastro"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/ic_botao_voltar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:background="@null"
                 android:scaleType="centerInside"
@@ -29,32 +30,34 @@
                 android:contentDescription="@string/descricao_botao_voltar"/>
 
         <TextView
-                android:id="@+id/text_cadastrar_cartao"
+                android:id="@+id/tv_tituloCadastrarCartao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cadastrar_cartao"
                 android:textColor="@color/corFonteBranca"
-                android:paddingLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:paddingRight="15dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginStart="27dp"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/botao_voltar_cadastro_cartao"/>
+                app:layout_constraintTop_toBottomOf="@+id/ib_botaoVoltarCadastro"/>
 
         <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_numero_cartao"
+                android:id="@+id/til_numeroCartao"
                 style="@style/CustomizaEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:layout_marginLeft="27dp"
+                android:layout_marginRight="27dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_cadastrar_cartao">
+                app:layout_constraintTop_toBottomOf="@id/tv_tituloCadastrarCartao">
 
             <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_numero_cartao"
+                    android:id="@+id/tiet_numeroCartao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="6dp"
@@ -68,16 +71,18 @@
 
 
         <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_nome_titular"
-                style="@style/CustomizaEditText"
+                android:id="@+id/til_nomeTitular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_numero_cartao">
+                app:layout_constraintTop_toBottomOf="@+id/til_numeroCartao"
+                android:layout_marginLeft="27dp"
+                android:layout_marginRight="27dp"
+                style="@style/CustomizaEditText">
 
             <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_nome_titular"
+                    android:id="@+id/tiet_nomeTitular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="7dp"
@@ -91,18 +96,20 @@
 
 
         <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_vencimento"
+                android:id="@+id/til_vencimento"
                 style="@style/CustomizaEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/input_cvv"
-                app:layout_constraintTop_toBottomOf="@+id/input_nome_titular"
+                app:layout_constraintRight_toLeftOf="@id/til_cvv"
+                app:layout_constraintTop_toBottomOf="@+id/til_nomeTitular"
+                android:layout_marginLeft="27dp"
                 android:inputType="text"
-                app:counterMaxLength="5">
+                app:counterMaxLength="5"
+                tools:ignore="RtlHardcoded">
 
             <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_vencimento"
+                    android:id="@+id/tiet_vencimento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="7dp"
@@ -115,17 +122,19 @@
 
 
         <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_cvv"
+                android:id="@+id/til_cvv"
                 style="@style/CustomizaEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/input_vencimento"
-                app:layout_constraintTop_toBottomOf="@id/input_nome_titular"
-                android:textAllCaps="false">
+                app:layout_constraintLeft_toRightOf="@id/til_vencimento"
+                app:layout_constraintTop_toBottomOf="@id/til_nomeTitular"
+                android:layout_marginRight="27dp"
+                android:textAllCaps="false"
+                tools:ignore="RtlHardcoded">
 
             <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_cvv"
+                    android:id="@+id/tiet_cvv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="7dp"
@@ -140,12 +149,13 @@
 
 
         <Button
-                android:id="@+id/button_salvar_cartao"
+                android:id="@+id/btn_salvarCartao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
                 style="@style/CustomizaBotaoPadrao"
                 android:text="@string/botao_salvar"
                 android:visibility="visible"/>

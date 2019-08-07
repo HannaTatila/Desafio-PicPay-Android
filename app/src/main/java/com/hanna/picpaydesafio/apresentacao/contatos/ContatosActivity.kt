@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.SearchView
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
 import com.hanna.picpaydesafio.apresentacao.cartao.PreCadastroCartaoActivity
@@ -20,15 +21,22 @@ class ContatosActivity : AppCompatActivity() {
 
     private lateinit var mPreCadastroCartaoActivity: PreCadastroCartaoActivity
     private lateinit var mCadastroCartaoActivity: CadastroCartaoActivity
+    private lateinit var mCampoBusca: SearchView
     private var mNumeroCartaoCadastrado: String = ""
     private var mDisposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contatos)
+
         mPreCadastroCartaoActivity = PreCadastroCartaoActivity()
         mCadastroCartaoActivity = CadastroCartaoActivity()
+        mCampoBusca = sv_buscaContatos
 
+        manipulaViewModelContatos()
+    }
+
+    private fun manipulaViewModelContatos() {
         val viewModelContatos = ViewModelProviders.of(this).get(ContatosViewModel::class.java)
         contatosObserver(viewModelContatos)
         viewModelContatos.buscaListaContatos()
@@ -36,14 +44,13 @@ class ContatosActivity : AppCompatActivity() {
 
     private fun contatosObserver(viewModelContatos: ContatosViewModel) {
         viewModelContatos.contatoLiveData.observe(this, Observer {
-            it?.let { contatos ->
-                with(recycler_contatos) {
-                    val adapterContatos = ListaContatosAdapter(contatos) { contato ->
+            it?.let { listaContatos ->
+                with(rv_listaContatos) {
+                    val adapterContatos = ListaContatosAdapter(listaContatos) { contato ->
                         viewModelContatos.gravaDadosContatoSelecionado(this@ContatosActivity, contato)
                         mNumeroCartaoCadastrado = viewModelContatos.buscaNumeroCartaoCadastrado(this@ContatosActivity)
                         defineProximaTela()
                     }
-
                     verificaMudancaCampoBusca(adapterContatos)
                     layoutManager = LinearLayoutManager(this@ContatosActivity, RecyclerView.VERTICAL, false)
                     setHasFixedSize(true)
@@ -54,10 +61,11 @@ class ContatosActivity : AppCompatActivity() {
     }
 
     private fun verificaMudancaCampoBusca(adapterContatos: ListaContatosAdapter) {
-        mDisposable = search_contatos.queryTextChanges()
+        //TODO: pesquisar um pouco mais sobre esse metodo
+        mDisposable = mCampoBusca.queryTextChanges()
             .skipInitialValue()
             .subscribe { termo ->
-                //if (termo.isNullOrBlank()) restauraCampoBusca() else customimzaCampoBusca()
+                mCampoBusca.onActionViewExpanded()
                 adapterContatos.filter.filter(termo)
             }
     }
@@ -80,14 +88,14 @@ class ContatosActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        search_contatos.setQuery("", false)
-        search_contatos.clearFocus()
+        with(mCampoBusca) {
+            setQuery("", false)
+            clearFocus()
+        }
     }
 
     companion object {
-        fun buscaIntent(contexto: Context): Intent {
-            return Intent(contexto, ContatosActivity::class.java)
-        }
+        fun buscaIntent(contexto: Context) = Intent(contexto, ContatosActivity::class.java)
     }
 
 }

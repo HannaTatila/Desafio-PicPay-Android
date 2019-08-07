@@ -22,7 +22,7 @@
     <string name="msg_cadastrar_cartao_para_pagamento">Para fazer pagamentos para outras pessoas você precisa cadastrar
         um cartão de crédito pessoal
     </string>
-    <string name="botao_cadastrar_cartao">Cadastrar Cartão</string>
+    <string name="botao_cadastrar_cartao">Cadastrar cartão</string>
 
     <!-- Activity Pagamento -->
     <string name="cifrao">R$</string>

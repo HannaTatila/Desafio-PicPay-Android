@@ -14,5 +14,5 @@ interface ServicoWeb {
     fun buscaListaContatos(): Call<List<ContatoResponse>>
 
     @POST("/tests/mobdev/transaction")
-    fun finalizaTransacao(@Body pag: PagamentoResponse): Call<TransacaoResponse>
+    fun finalizaTransacao(@Body pagamento: PagamentoResponse): Call<TransacaoResponse>
 }

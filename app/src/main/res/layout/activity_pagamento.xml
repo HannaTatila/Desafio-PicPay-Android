@@ -9,12 +9,12 @@
         tools:context=".apresentacao.pagamento.PagamentoActivity">
 
     <ImageButton
-            android:id="@+id/botao_voltar_pagamento"
+            android:id="@+id/ib_botaoVoltarPagamento"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_botao_voltar"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:src="@drawable/ic_botao_voltar"
             android:layout_marginTop="10dp"
             android:background="@null"
             android:scaleType="centerInside"
@@ -22,7 +22,7 @@
             android:contentDescription="@string/descricao_botao_voltar"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_foto_contato"
+            android:id="@+id/civ_fotoContato"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -33,10 +33,10 @@
             android:src="@drawable/ic_cartao_credito"/>
 
     <TextView
-            android:id="@+id/text_username_contato"
+            android:id="@+id/tv_usernameContato"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/image_foto_contato"
+            app:layout_constraintTop_toBottomOf="@id/civ_fotoContato"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="8dp"
@@ -50,14 +50,14 @@
             android:id="@+id/linear_valor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/text_username_contato"
+            app:layout_constraintTop_toBottomOf="@id/tv_usernameContato"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="26dp"
             android:orientation="horizontal">
 
         <TextView
-                android:id="@+id/txt_cifrao"
+                android:id="@+id/tv_cifrao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -67,7 +67,7 @@
                 android:text="@string/cifrao"/>
 
         <me.abhinay.input.CurrencyEditText
-                android:id="@+id/currencyedit_valor"
+                android:id="@+id/cet_valorPagamento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -90,7 +90,7 @@
             android:orientation="horizontal">
 
         <TextView
-                android:id="@+id/text_numero_cartao"
+                android:id="@+id/tv_numeroCartao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -100,7 +100,7 @@
                 tools:text="Mastercard 1234 * "/>
 
         <TextView
-                android:id="@+id/link_editar_cartao"
+                android:id="@+id/tv_linkEditarCartao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -111,7 +111,7 @@
     </LinearLayout>
 
     <Button
-            android:id="@+id/button_pagar"
+            android:id="@+id/btn_pagar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -121,7 +121,7 @@
             android:enabled="false"/>
 
     <ProgressBar
-            android:id="@+id/progress_bar"
+            android:id="@+id/pb_carregaTransacao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"

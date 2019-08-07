@@ -17,9 +17,8 @@ class PreCadastroCartaoActivity : AppCompatActivity() {
     }
 
     private fun controlaEventoClique() {
-        botao_voltar_pre_cadastro.setOnClickListener { onBackPressed() }
-
-        button_cadastrar_cartao.setOnClickListener { chamaTelaCadastro() }
+        ib_botaoVoltarPreCadastro.setOnClickListener { onBackPressed() }
+        btn_cadastrarCartao.setOnClickListener { chamaTelaCadastro() }
     }
 
     private fun chamaTelaCadastro() {
@@ -28,8 +27,6 @@ class PreCadastroCartaoActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun buscaIntent(contexto: Context): Intent {
-            return Intent(contexto, PreCadastroCartaoActivity::class.java)
-        }
+        fun buscaIntent(contexto: Context) = Intent(contexto, PreCadastroCartaoActivity::class.java)
     }
 }
