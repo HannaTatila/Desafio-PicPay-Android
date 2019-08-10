@@ -76,6 +76,7 @@ class ListaContatosAdapter(
                 return resultadoFiltro
             }
 
+            @Suppress("UNCHECKED_CAST")
             override fun publishResults(entradaFiltro: CharSequence?, resultadoFiltro: FilterResults?) {
                 mListaContatos = resultadoFiltro?.values as List<Contato>
                 notifyDataSetChanged()

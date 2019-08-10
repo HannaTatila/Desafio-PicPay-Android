@@ -30,7 +30,6 @@ import java.util.*
 class PagamentoActivity : AppCompatActivity() {
 
     private lateinit var mPagamentoViewModel: PagamentoViewModel
-    //TODO: pegar campo
     private var mNumeroCartao: String? = ""
     private var mNumeroCartaoProtegido: String = ""
     private var mUrlImagemContato: String = ""
@@ -221,10 +220,8 @@ class PagamentoActivity : AppCompatActivity() {
 
         val calendario = Calendar.getInstance()
         calendario.timeInMillis = timestamp.toLong()
-        val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale.getDefault())
+        val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale("pt", "BR"))
         return formatoDataHora.format(calendario.timeInMillis)
-
-        //val date = DateFormat.format("dd-MM-yyyy 'às' hh:mm:ss", calendario).toString()
     }
 
     private fun chamaTelaContatos() {

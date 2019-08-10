@@ -74,7 +74,6 @@ class CadastroCartaoActivity : AppCompatActivity() {
         val listaCamposEditText =
             listOf(mCampoNumeroCartao, mCampoTitularCartao, mCampoVencimentoCartao, mCampoCvvCartao)
 
-        //mCampoVencimentoCartao.addTextChangedListener(Mask.mask("##/##", mCampoVencimentoCartao))
         for (campo in listaCamposEditText) {
             campo.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {}

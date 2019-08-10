@@ -33,7 +33,7 @@ class PagamentoViewModel : ViewModel() {
 
     private fun criaTransacao(contexto: Context, valor: BigDecimal): PagamentoResponse {
         val cartao = capturaDadosCartao(contexto)
-        val idRecebedor = dadosRecebedorLiveData.value!!.id.toInt()
+        val idRecebedor = dadosRecebedorLiveData.value!!.id
         return PagamentoResponse(cartao.numero, cartao.cvv, valor, cartao.vencimento, idRecebedor)
     }
 
