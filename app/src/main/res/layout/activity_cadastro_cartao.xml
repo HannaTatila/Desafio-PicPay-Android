@@ -14,18 +14,7 @@
             android:background="@color/colorPrimaryDark"
             android:orientation="vertical">
 
-        <ImageButton
-                android:id="@+id/ib_botaoVoltarCadastro"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_botao_voltar"
-                android:layout_marginTop="10dp"
-                android:background="@null"
-                android:scaleType="centerInside"
-                android:tint="@color/colorAccent"
-                android:contentDescription="@string/descricao_botao_voltar"/>
+        <include layout="@layout/include_botao_voltar"/>
 
         <TextView
                 android:id="@+id/tv_tituloCadastrarCartao"
@@ -39,7 +28,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ib_botaoVoltarCadastro"/>
+                app:layout_constraintTop_toBottomOf="@+id/ib_botaoVoltar"/>
 
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_numeroCartao"

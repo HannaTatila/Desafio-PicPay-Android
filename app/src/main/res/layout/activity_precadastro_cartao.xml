@@ -5,18 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ImageButton
-            android:id="@+id/ib_botaoVoltarPreCadastro"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_botao_voltar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@null"
-            android:scaleType="centerInside"
-            android:tint="@color/colorAccent"
-            android:contentDescription="@string/descricao_botao_voltar"/>
+    <include layout="@layout/include_botao_voltar"/>
 
     <ImageView
             android:id="@+id/iv_imagemCartao"
@@ -54,7 +43,7 @@
 
     <TextView
             android:id="@+id/tv_textoInformativo"
-            android:layout_width="250dp"
+            android:layout_width="241dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_gravity="center_horizontal|center"

@@ -28,7 +28,7 @@ class PagamentoViewModel : ViewModel() {
 
     fun requisitarTransacao(contexto: Context, valor: BigDecimal) {
         val transacao = criaTransacao(contexto, valor)
-        enviaDadosTransacao(transacao)
+        enviaDadosTransacao(transacao, contexto)
     }
 
     private fun criaTransacao(contexto: Context, valor: BigDecimal): PagamentoResponse {
@@ -43,11 +43,16 @@ class PagamentoViewModel : ViewModel() {
         return cartaoCadastrado
     }
 
-    fun enviaDadosTransacao(transacao: PagamentoResponse) {
+    fun enviaDadosTransacao(transacao: PagamentoResponse, contexto: Context) {
         InicializaRetrofit.servicoWeb().finalizaTransacao(transacao).enqueue(object : Callback<TransacaoResponse> {
             override fun onResponse(call: Call<TransacaoResponse>, resposta: Response<TransacaoResponse>) {
                 if (resposta.isSuccessful) {
-                    resposta.body()?.let { transacaoLiveData.value = it.transacao }
+                    resposta.body()?.let {
+                        if (it.transacao.sucesso) {
+                            removeContatoSalvo(contexto)
+                        }
+                        transacaoLiveData.value = it.transacao
+                    }
                 }
             }
 
@@ -55,6 +60,11 @@ class PagamentoViewModel : ViewModel() {
                 Log.e("Erro onFailure", t.message)
             }
         })
+    }
+
+    private fun removeContatoSalvo(contexto: Context) {
+        val contatoPreferencias = PreferenciasSeguranca(contexto)
+        contatoPreferencias.removeContato()
     }
 
 }

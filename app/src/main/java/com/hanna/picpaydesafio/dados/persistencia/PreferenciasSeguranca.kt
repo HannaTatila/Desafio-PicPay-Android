@@ -31,12 +31,22 @@ class PreferenciasSeguranca(contexto: Context) {
         return contatoSelecionado
     }
 
+    fun removeContato() {
+        removeValorContato(ConstantesPersistencia.CHAVE_CONTATO.ID_CONTATO)
+        removeValorContato(ConstantesPersistencia.CHAVE_CONTATO.IMG_CONTATO)
+        removeValorContato(ConstantesPersistencia.CHAVE_CONTATO.USERNAME_CONTATO)
+    }
+
     fun armazenaValorContato(chave: String, valor: String) {
         mContatoPreferencias.edit().putString(chave, valor).apply()
     }
 
     fun buscaValorContato(chave: String): String {
         return mContatoPreferencias.getString(chave, "")
+    }
+
+    fun removeValorContato(chave: String) {
+        mContatoPreferencias.edit().remove(chave).apply()
     }
 
     fun salvaCartao(cartao: Cartao) {
@@ -64,4 +74,5 @@ class PreferenciasSeguranca(contexto: Context) {
     fun buscaValorCartao(chave: String): String {
         return mCartaoPreferencias.getString(chave, "")
     }
+
 }

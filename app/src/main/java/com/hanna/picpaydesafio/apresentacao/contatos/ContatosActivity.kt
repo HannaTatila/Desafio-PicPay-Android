@@ -22,6 +22,8 @@ class ContatosActivity : AppCompatActivity() {
     private lateinit var mPreCadastroCartaoActivity: PreCadastroCartaoActivity
     private lateinit var mCadastroCartaoActivity: CadastroCartaoActivity
     private lateinit var mCampoBusca: SearchView
+    private val mFundoCampoBuscaAtivo = R.drawable.shape_campo_busca_ativo
+    private val mFundoCampoBuscaInativo = R.drawable.shape_campo_busca_inativo
     private var mNumeroCartaoCadastrado: String = ""
     private var mDescarte: Disposable? = null
 
@@ -63,9 +65,16 @@ class ContatosActivity : AppCompatActivity() {
     private fun verificaMudancaCampoBusca(adapterContatos: ListaContatosAdapter) {
         mDescarte = mCampoBusca.queryTextChanges()
             .subscribe { termo ->
+                customizaCampoBusca(termo)
                 mCampoBusca.onActionViewExpanded()
                 adapterContatos.filter.filter(termo)
             }
+    }
+
+    private fun customizaCampoBusca(termo: CharSequence?) {
+        mCampoBusca.setBackgroundResource(
+            if (termo.isNullOrBlank()) mFundoCampoBuscaInativo else mFundoCampoBuscaAtivo
+        )
     }
 
     private fun defineProximaTela() {

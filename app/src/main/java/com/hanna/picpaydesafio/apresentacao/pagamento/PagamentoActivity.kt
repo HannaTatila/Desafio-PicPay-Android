@@ -6,25 +6,19 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import com.bumptech.glide.Glide
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.cartao.CadastroCartaoActivity
-import com.hanna.picpaydesafio.apresentacao.contatos.ContatosActivity
-import com.hanna.picpaydesafio.util.ConstantesPacoteIntent
+import com.hanna.picpaydesafio.util.ConstantesPacotes
 import kotlinx.android.synthetic.main.activity_pagamento.*
-import kotlinx.android.synthetic.main.view_recibo.view.*
+import kotlinx.android.synthetic.main.include_botao_voltar.*
 import me.abhinay.input.CurrencyEditText
 import org.jetbrains.anko.toast
 import java.math.BigDecimal
-import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class PagamentoActivity : AppCompatActivity() {
@@ -51,7 +45,7 @@ class PagamentoActivity : AppCompatActivity() {
     private fun capturaNumeroCartao() {
         val pacote = intent.extras
         if (pacote != null) {
-            mNumeroCartao = pacote.getString(ConstantesPacoteIntent.CHAVE_CARTAO.NUMERO_CARTAO)
+            mNumeroCartao = pacote.getString(ConstantesPacotes.CHAVE_CARTAO.NUMERO_CARTAO)
         }
     }
 
@@ -112,7 +106,7 @@ class PagamentoActivity : AppCompatActivity() {
     }
 
     private fun controlaEventoClique() {
-        ib_botaoVoltarPagamento.setOnClickListener { onBackPressed() }
+        ib_botaoVoltar.setOnClickListener { onBackPressed() }
 
         tv_linkEditarCartao.setOnClickListener { chamaTelaCadastroCartao() }
 
@@ -133,9 +127,8 @@ class PagamentoActivity : AppCompatActivity() {
         mPagamentoViewModel.transacaoLiveData.observe(this, Observer {
             it?.let { transacao ->
                 if (transacao.sucesso) {
-                    //mostraCarregamento()
                     toast(getString(R.string.mag_sucesso_pagamento))
-                    configuraViewRecibo(transacao.id, transacao.valor, transacao.timestamp)
+                    geraRecibo(transacao.id, transacao.valor, transacao.timestamp)
                 } else {
                     toast(getString(R.string.mag_recusa_pagamento))
                 }
@@ -143,9 +136,22 @@ class PagamentoActivity : AppCompatActivity() {
         })
     }
 
-    private fun mostraCarregamento() {
-        pb_carregaTransacao.visibility = View.VISIBLE
-        tela_pagamento.visibility = View.GONE
+    private fun geraRecibo(idTransacao: Int, valor: BigDecimal, timestamp: String) {
+        val recibo = ReciboBottomSheetFragment()
+        recibo.arguments = coletaValoresRecibo(idTransacao, valor, timestamp)
+        recibo.show(supportFragmentManager, recibo.tag)
+    }
+
+    private fun coletaValoresRecibo(idTransacao: Int, valor: BigDecimal, timestamp: String): Bundle {
+        val pacoteTransacao = Bundle()
+        pacoteTransacao.putString(ConstantesPacotes.CHAVE_TRANSACAO.ID_TRANSACAO, idTransacao.toString())
+        pacoteTransacao.putString(ConstantesPacotes.CHAVE_TRANSACAO.VALOR_TRANSACAO, valor.toString())
+        pacoteTransacao.putString(ConstantesPacotes.CHAVE_TRANSACAO.TIMESTAMP_TRANSACAO, timestamp)
+        pacoteTransacao.putString(ConstantesPacotes.CHAVE_TRANSACAO.FOTO_TRANSACAO, mUrlImagemContato)
+        pacoteTransacao.putString(ConstantesPacotes.CHAVE_TRANSACAO.USERNAME_TRANSACAO, mUsernameContato)
+        pacoteTransacao.putString(ConstantesPacotes.CHAVE_TRANSACAO.CARTAO_TRANSACAO, mNumeroCartaoProtegido)
+
+        return pacoteTransacao
     }
 
     private fun chamaTelaCadastroCartao() {
@@ -156,78 +162,8 @@ class PagamentoActivity : AppCompatActivity() {
     companion object {
         fun buscaIntent(contexto: Context, numeroCartao: String): Intent {
             val pacote = Bundle()
-            pacote.putString(ConstantesPacoteIntent.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
+            pacote.putString(ConstantesPacotes.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
             return Intent(contexto, PagamentoActivity::class.java).putExtras(pacote)
         }
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////// Recibo /////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private fun configuraViewRecibo(idTransacao: Int, valor: BigDecimal, timestamp: String) {
-        val viewRecibo = criaViewRecibo()
-        incorporaDadosViewRecibbo(viewRecibo, idTransacao, valor, timestamp)
-        mostraRecibo(viewRecibo)
-    }
-
-    fun criaViewRecibo(): View {
-        return this.layoutInflater.inflate(R.layout.view_recibo, null)
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun incorporaDadosViewRecibbo(viewRecibo: View, idTransacao: Int, valor: BigDecimal, timestamp: String) {
-        Glide.with(viewRecibo.context).load(mUrlImagemContato).into(viewRecibo.img_foto_contato)
-        viewRecibo.txt_username_contato.text = mUsernameContato
-        viewRecibo.txt_numero_transacao.text = getString(R.string.transacao) + idTransacao.toString()
-        viewRecibo.txt_dados_cartao.text = getString(R.string.cartao_master) + mNumeroCartaoProtegido
-
-        val valorEmReal = formataBigDecimalParaMoeda(valor)
-        viewRecibo.txt_valor.text = valorEmReal
-        viewRecibo.txt_total_pago.text = valorEmReal
-
-        val dataHoraAtual = buscaDataHoraAtual(timestamp)
-        viewRecibo.txt_data_hora.text = dataHoraAtual
-    }
-
-    fun formataBigDecimalParaMoeda(valor: BigDecimal): String {
-        val formatacaoParaReal = DecimalFormat
-            .getCurrencyInstance(Locale("pt", "br"))
-        return formatacaoParaReal.format(valor)
-    }
-
-    private fun mostraRecibo(viewRecibo: View) {
-        val caixaDialogo = BottomSheetDialog(this)
-        caixaDialogo.setContentView(viewRecibo)
-        caixaDialogo.show()
-    }
-
-    private fun buscaDataHoraAtual(timestamp: String): String {
-        /*val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale("pt", "BR"))
-        val calendario = Calendar.getInstance()
-
-        val ano = calendario.get(Calendar.YEAR)
-        val mes = calendario.get(Calendar.MONTH)
-        val diaDoMes = calendario.get(Calendar.DAY_OF_MONTH)
-        val hora = calendario.get(Calendar.HOUR_OF_DAY)
-        val minuto = calendario.get(Calendar.MINUTE)
-
-        calendario.set(ano, mes, diaDoMes, hora, minuto)
-        println(calendario.time)
-
-        return formatoDataHora.format(calendario.time)*/
-
-
-        val calendario = Calendar.getInstance()
-        calendario.timeInMillis = timestamp.toLong()
-        val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale("pt", "BR"))
-        return formatoDataHora.format(calendario.timeInMillis)
-    }
-
-    private fun chamaTelaContatos() {
-        val intent = ContatosActivity.buscaIntent(this)
-        this.startActivity(intent)
-    }
-
-
 }

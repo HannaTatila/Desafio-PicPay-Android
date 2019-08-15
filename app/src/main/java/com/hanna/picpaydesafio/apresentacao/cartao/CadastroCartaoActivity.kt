@@ -13,8 +13,9 @@ import android.view.View
 import android.widget.Button
 import com.hanna.picpaydesafio.R
 import com.hanna.picpaydesafio.apresentacao.pagamento.PagamentoActivity
-import com.hanna.picpaydesafio.util.ConstantesPacoteIntent
+import com.hanna.picpaydesafio.util.ConstantesPacotes
 import kotlinx.android.synthetic.main.activity_cadastro_cartao.*
+import kotlinx.android.synthetic.main.include_botao_voltar.*
 import org.jetbrains.anko.toast
 
 class CadastroCartaoActivity : AppCompatActivity() {
@@ -99,7 +100,7 @@ class CadastroCartaoActivity : AppCompatActivity() {
     }
 
     private fun capturaEventoCliqueBotao() {
-        ib_botaoVoltarCadastro.setOnClickListener { onBackPressed() }
+        ib_botaoVoltar.setOnClickListener { onBackPressed() }
         mBotaoSalvar.setOnClickListener { salvarCartao() }
     }
 
@@ -126,7 +127,7 @@ class CadastroCartaoActivity : AppCompatActivity() {
     companion object {
         fun buscaIntent(contexto: Context, numeroCartao: String?): Intent {
             val pacote = Bundle()
-            pacote.putString(ConstantesPacoteIntent.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
+            pacote.putString(ConstantesPacotes.CHAVE_CARTAO.NUMERO_CARTAO, numeroCartao)
             return Intent(contexto, CadastroCartaoActivity::class.java).putExtras(pacote)
         }
     }

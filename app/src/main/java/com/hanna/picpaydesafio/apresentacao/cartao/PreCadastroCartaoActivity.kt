@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.hanna.picpaydesafio.R
 import kotlinx.android.synthetic.main.activity_precadastro_cartao.*
+import kotlinx.android.synthetic.main.include_botao_voltar.*
 
 class PreCadastroCartaoActivity : AppCompatActivity() {
 
@@ -17,7 +18,7 @@ class PreCadastroCartaoActivity : AppCompatActivity() {
     }
 
     private fun controlaEventoClique() {
-        ib_botaoVoltarPreCadastro.setOnClickListener { onBackPressed() }
+        ib_botaoVoltar.setOnClickListener { onBackPressed() }
         btn_cadastrarCartao.setOnClickListener { chamaTelaCadastro() }
     }
 

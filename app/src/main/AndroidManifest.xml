@@ -13,10 +13,10 @@
             android:theme="@style/AppTheme"
             android:networkSecurityConfig="@xml/network_security_config">
 
-        <activity android:name=".apresentacao.contatos.ContatosActivity">
+        <activity android:name=".apresentacao.contatos.ContatosActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -26,8 +26,8 @@
         <activity android:name=".apresentacao.cartao.CadastroCartaoActivity"/>
 
         <activity android:name=".apresentacao.pagamento.PagamentoActivity"
-
                   android:windowSoftInputMode="stateVisible|adjustResize"/>
+
     </application>
 
 </manifest>

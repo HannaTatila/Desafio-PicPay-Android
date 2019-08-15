@@ -8,18 +8,7 @@
         android:id="@+id/tela_pagamento"
         tools:context=".apresentacao.pagamento.PagamentoActivity">
 
-    <ImageButton
-            android:id="@+id/ib_botaoVoltarPagamento"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_botao_voltar"
-            android:layout_marginTop="10dp"
-            android:background="@null"
-            android:scaleType="centerInside"
-            android:tint="@color/colorAccent"
-            android:contentDescription="@string/descricao_botao_voltar"/>
+    <include layout="@layout/include_botao_voltar"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_fotoContato"
@@ -43,7 +32,6 @@
             android:layout_gravity="center"
             android:textSize="14sp"
             android:textColor="@color/corFonteBranca"
-            android:text="teste"
             tools:text="Username do recebedor"/>
 
     <LinearLayout
@@ -106,6 +94,8 @@
                 android:textSize="14sp"
                 android:textColor="@color/colorAccent"
                 android:text="@string/link_editar"
+                android:background="?attr/selectableItemBackground"
+                android:padding="2dp"
                 android:textAllCaps="true"/>
 
     </LinearLayout>
@@ -119,20 +109,5 @@
             android:layout_margin="16dp"
             android:text="@string/botao_pagar"
             android:enabled="false"/>
-
-    <ProgressBar
-            android:id="@+id/pb_carregaTransacao"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:indeterminateDuration="@android:integer/config_mediumAnimTime"
-            android:scrollbarFadeDuration="@android:integer/config_mediumAnimTime"
-            android:scrollbarDefaultDelayBeforeFade="@android:integer/config_mediumAnimTime"/>
-
 
 </android.support.constraint.ConstraintLayout>
