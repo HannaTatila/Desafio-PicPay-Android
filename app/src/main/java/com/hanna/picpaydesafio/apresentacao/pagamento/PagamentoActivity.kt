@@ -90,7 +90,7 @@ class PagamentoActivity : AppCompatActivity() {
 
     private fun configuraComponentesTela() {
         val valorFoiPreenchido = verificaValorPreenchido()
-        if (valorFoiPreenchido) customizaCores(R.color.colorAccent) else customizaCores(R.color.corCinzaBotaoDesabilitado)
+        if (valorFoiPreenchido) customizaCores(R.color.corVerdeFonte) else customizaCores(R.color.corHintCinzaEscuro)
         btn_pagar.isEnabled = valorFoiPreenchido
     }
 

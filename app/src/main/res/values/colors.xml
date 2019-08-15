@@ -3,12 +3,21 @@
     <color name="colorPrimary">#1D1E20</color>
     <color name="colorPrimaryDark">#1D1E20</color>
     <color name="colorAccent">#11C66F</color>
-    <!--#31C76A-->
 
-    <color name="corFonteBranca">#FFFFFF</color>
+    <color name="corBrancaFonte">#FFFFFF</color>
+    <color name="corCinzaEscuroFonte">#7E7C7C</color>
+    <color name="corVerdeFonte">#11C66F</color>
+    <color name="corBrancaFonteTitulo">#FFFFFF</color>
+
     <color name="corHintCinzaEscuro">#7E7C7C</color>
+
     <color name="corCinzaCampoBusca">#2B2C2F</color>
-    <color name="corCinzaClaro">#6B6B6D</color>
+    <color name="corBrancaBordaCampoBusca">#FFFFFF</color>
+
+    <color name="corVerdeBotaoPadrao">#11C66F</color>
     <color name="corCinzaBotaoDesabilitado">#8E919C</color>
+    <color name="corVerdeBotaoVoltar">#11C66F</color>
+
     <color name="corBarraCabecalhoRecibo">#151516</color>
+
 </resources>

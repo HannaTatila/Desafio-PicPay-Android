@@ -3,5 +3,5 @@
        android:shape="rectangle">
     <solid android:color="@color/corCinzaCampoBusca"/>
     <corners android:radius="100dp"/>
-    <stroke android:color="@color/corFonteBranca" android:width="0.8dp"/>
+    <stroke android:color="@color/corBrancaBordaCampoBusca" android:width="0.8dp"/>
 </shape>

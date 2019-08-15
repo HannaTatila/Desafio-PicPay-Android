@@ -12,5 +12,5 @@
         android:layout_marginTop="10dp"
         android:background="?attr/selectableItemBackground"
         android:scaleType="centerInside"
-        android:tint="@color/colorAccent"
+        android:tint="@color/corVerdeBotaoVoltar"
         android:contentDescription="@string/descricao_botao_voltar"/>

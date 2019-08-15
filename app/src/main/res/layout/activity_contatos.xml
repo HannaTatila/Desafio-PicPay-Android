@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/titulo_contatos"
-                    android:textColor="@color/corFonteBranca"
+                    android:textColor="@color/corBrancaFonteTitulo"
                     android:textSize="30sp"
                     android:layout_marginTop="28dp"
                     android:textStyle="bold"
@@ -55,7 +55,6 @@
                         android:focusable="false"
                         android:focusableInTouchMode="true"
                         android:queryBackground="@color/corCinzaCampoBusca"
-                        android:submitBackground="@color/corCinzaCampoBusca"
                         android:lines="1"/>
 
             </LinearLayout>

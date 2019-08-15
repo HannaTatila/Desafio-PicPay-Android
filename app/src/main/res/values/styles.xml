@@ -12,7 +12,7 @@
     </style>
 
     <style name="CustomizaEditText" parent="@android:style/TextAppearance">
-        <item name="android:textColorHighlight">@color/corFonteBranca</item>
+        <item name="android:textColorHighlight">@color/corBrancaFonte</item>
         <item name="android:textColorHint">@color/corHintCinzaEscuro</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_marginTop">60dp</item>

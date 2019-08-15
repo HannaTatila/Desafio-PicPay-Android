@@ -24,7 +24,7 @@
             android:textSize="16sp"
             android:layout_toRightOf="@+id/civ_fotoContato"
             android:layout_toEndOf="@+id/civ_fotoContato"
-            android:textColor="@color/corFonteBranca"
+            android:textColor="@color/corBrancaFonte"
             tools:text="Username do contato"/>
 
     <TextView
@@ -37,7 +37,7 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="28dp"
             android:textSize="15sp"
-            android:textColor="@color/corHintCinzaEscuro"
+            android:textColor="@color/corCinzaEscuroFonte"
             tools:text="Nome do contato"/>
 
 </RelativeLayout>

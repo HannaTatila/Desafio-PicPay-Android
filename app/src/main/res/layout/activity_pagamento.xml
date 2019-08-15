@@ -31,7 +31,7 @@
             android:layout_marginTop="8dp"
             android:layout_gravity="center"
             android:textSize="14sp"
-            android:textColor="@color/corFonteBranca"
+            android:textColor="@color/corBrancaFonte"
             tools:text="Username do recebedor"/>
 
     <LinearLayout
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:textCursorDrawable="@null"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/corVerdeFonte"
                 android:textColorHint="@color/corHintCinzaEscuro"
                 android:hint="@string/valor_zerado"
                 android:inputType="number"
@@ -84,7 +84,7 @@
                 android:textSize="14sp"
                 android:layout_marginRight="6dp"
                 android:layout_marginEnd="6dp"
-                android:textColor="@color/corFonteBranca"
+                android:textColor="@color/corBrancaFonte"
                 tools:text="Mastercard 1234 * "/>
 
         <TextView
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/corVerdeFonte"
                 android:text="@string/link_editar"
                 android:background="?attr/selectableItemBackground"
                 android:padding="2dp"
