@@ -52,7 +52,7 @@ class ReciboBottomSheetFragment : BottomSheetDialogFragment() {
         val urlImagemRecebedor = arguments?.get(ConstantesPacotes.CHAVE_TRANSACAO.FOTO_TRANSACAO)
         val numeroCartao = arguments?.get(ConstantesPacotes.CHAVE_TRANSACAO.CARTAO_TRANSACAO)
         val valorEmReal = formataBigDecimalParaMoeda(valor.toString().toBigDecimal())
-        val dataHoraAtual = buscaDataHoraAtual(timestamp.toString())
+        val dataHoraAtual = buscaDataHoraAtual(timestamp.toString().toLong())
 
         with(reciboFragmentView!!) {
             tv_usernameContato.text = usernameRecebedor.toString()
@@ -71,24 +71,9 @@ class ReciboBottomSheetFragment : BottomSheetDialogFragment() {
         return formatacaoParaReal.format(valor)
     }
 
-    private fun buscaDataHoraAtual(timestamp: String): String {
-        val calendario = Calendar.getInstance()
-        calendario.timeInMillis = timestamp.toLong()
-        val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale("pt", "BR"))
-        return formatoDataHora.format(calendario.timeInMillis)
-
-        /*val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm", Locale("pt", "BR"))
-        val calendario = Calendar.getInstance()
-
-        val ano = calendario.get(Calendar.YEAR)
-        val mes = calendario.get(Calendar.MONTH)
-        val diaDoMes = calendario.get(Calendar.DAY_OF_MONTH)
-        val hora = calendario.get(Calendar.HOUR_OF_DAY)
-        val minuto = calendario.get(Calendar.MINUTE)
-
-        calendario.set(ano, mes, diaDoMes, hora, minuto)
-        println(calendario.time)
-
-        return formatoDataHora.format(calendario.time)*/
+    private fun buscaDataHoraAtual(timestamp: Long): String {
+        val formatoDataHora = SimpleDateFormat("dd/MM/yyyy 'às' HH:mm", Locale("pt", "BR"))
+        val data = Date(timestamp * 1000)
+        return formatoDataHora.format(data)
     }
 }

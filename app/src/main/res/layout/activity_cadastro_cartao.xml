@@ -98,6 +98,7 @@
                     android:id="@+id/tiet_vencimento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="5"
                     android:paddingTop="7dp"
                     android:paddingBottom="2dp"
                     android:background="@drawable/linha_edit_text"
